@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fastQuote — BOM estimating & quoting in VS Code, Excel & LibreOffice</title>
+<meta name="description" content="fastQuote turns a Bill of Materials into a priced, customer-ready quote in one run. Multi-level BOMs, automatic BOQs, vendor POs, overhead & profit — VS Code GUI, git-tracked price book, and your own AI agent (bring your key). 30-day free trial.">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     EDIT ME — one place for every link and price on the page.
+     Replace the placeholder URLs before going live.
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+  const LINKS = {
+    trial:    "https://payhip.com/fastquote",            // trial download / checkout
+    buyPro:   "https://payhip.com/b/fastquote-pro",       // Tier 1 — all features
+    buyEnt:   "mailto:support@fastquote.app?subject=Enterprise",  // Tier 2 — quoted
+    github:   "https://github.com/fastquote-community",  // community rates + templates (CC BY 4.0)
+    discord:  "https://discord.gg/fastquote",
+    youtube:  "https://youtube.com/@fastquote",
+    docs:     "https://docs.fastquote.app",
+    support:  "mailto:support@fastquote.app",
+    releases: "https://github.com/fastquote/releases",
+  };
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="%23244061"/><text x="16" y="22" font-family="monospace" font-size="15" font-weight="700" fill="%23FFE9A8" text-anchor="middle">fq</text></svg>'>
+
+<style>
+/* ── Tokens ─────────────────────────────────────────────────────── */
+:root{
+  --ink:        #1B2A41;   /* headline / body navy-ink            */
+  --ink-soft:   #4A5A70;   /* secondary text                      */
+  --navy:       #244061;   /* brand header navy (from the app)    */
+  --paper:      #FAFBFC;   /* cool graph-paper white              */
+  --grid:       #E3E9F0;   /* hairline cell borders               */
+  --ledger:     #1F7A5C;   /* money green — totals & CTAs         */
+  --ledger-dk:  #166047;
+  --cell-yellow:#FFE9A8;   /* the app's input-cell highlight      */
+  --cell-yellow-soft:#FFF4CE;
+  --row-alt:    #F1F5FA;   /* alt-row tint (from the app)         */
+  --white:      #FFFFFF;
+
+  --serif: "IBM Plex Serif", Georgia, serif;
+  --sans:  "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+  --mono:  "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  --wrap: 1120px;
+  --radius: 6px;
+  --shadow: 0 1px 2px rgba(27,42,65,.06), 0 8px 28px rgba(27,42,65,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+body{
+  font:16px/1.6 var(--sans);
+  color:var(--ink);
+  background:var(--paper);
+}
+img,svg{display:block}
+a{color:var(--navy)}
+:focus-visible{outline:3px solid var(--ledger);outline-offset:2px;border-radius:2px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+.mono{font-family:var(--mono)}
+.hl{background:linear-gradient(transparent 55%, var(--cell-yellow) 55%);padding:0 .12em}
+
+/* section eyebrow — styled like a cell reference, because that's
+   how estimators actually navigate: by cell, not by chapter */
+.cellref{
+  font:600 12px/1 var(--mono);
+  letter-spacing:.08em;
+  color:var(--ink-soft);
+  display:inline-flex;align-items:center;gap:8px;
+  margin-bottom:14px;
+}
+.cellref::before{
+  content:attr(data-ref);
+  background:var(--white);border:1px solid var(--grid);
+  padding:4px 7px;border-radius:3px;color:var(--navy);
+}
+
+h2{font:700 clamp(26px,3.4vw,38px)/1.15 var(--serif);letter-spacing:-.01em}
+.sub{color:var(--ink-soft);max-width:56ch;margin-top:12px}
+section{padding:88px 0}
+
+/* ── Buttons ───────────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font:600 15px/1 var(--sans);
+  padding:14px 22px;border-radius:var(--radius);
+  text-decoration:none;border:1px solid transparent;
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  cursor:pointer;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:var(--ledger);color:#fff;box-shadow:0 2px 0 var(--ledger-dk)}
+.btn-primary:hover{background:var(--ledger-dk)}
+.btn-ghost{background:var(--white);color:var(--navy);border-color:var(--grid)}
+.btn-ghost:hover{border-color:var(--navy)}
+.btn .arrow{transition:transform .12s ease}
+.btn:hover .arrow{transform:translateX(3px)}
+
+/* ── Nav ───────────────────────────────────────────────────────── */
+header.site{
+  position:sticky;top:0;z-index:50;
+  background:rgba(250,251,252,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--grid);
+}
+.nav{display:flex;align-items:center;gap:28px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font:700 19px var(--serif);color:var(--ink);text-decoration:none}
+.logo .mark{
+  width:30px;height:30px;border-radius:5px;background:var(--navy);
+  color:var(--cell-yellow);font:700 14px/30px var(--mono);text-align:center;
+}
+.nav-links{display:flex;gap:22px;margin-left:auto}
+.nav-links a{font:500 14px var(--sans);color:var(--ink-soft);text-decoration:none}
+.nav-links a:hover{color:var(--ink)}
+.nav .btn{padding:10px 16px;font-size:14px}
+@media (max-width:820px){.nav-links{display:none}}
+
+/* ── Hero ──────────────────────────────────────────────────────── */
+.hero{
+  padding:76px 0 92px;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:34px 34px;
+  background-position:center top;
+  border-bottom:1px solid var(--grid);
+  position:relative;
+}
+.hero::after{ /* fade the graph paper toward the bottom */
+  content:"";position:absolute;inset:auto 0 0 0;height:140px;
+  background:linear-gradient(transparent, var(--paper));pointer-events:none;
+}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;position:relative;z-index:1}
+.hero h1{font:700 clamp(34px,4.6vw,54px)/1.08 var(--serif);letter-spacing:-.015em}
+.hero .tagline{font:600 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ledger);margin-bottom:18px}
+.hero p.lede{color:var(--ink-soft);font-size:18px;margin:20px 0 30px;max-width:46ch}
+.hero .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.trial-note{font:500 13px var(--mono);color:var(--ink-soft)}
+.suite-badges{display:flex;gap:10px;margin-top:26px}
+.suite-badges span{
+  font:500 12px var(--mono);color:var(--ink-soft);
+  background:var(--white);border:1px solid var(--grid);
+  padding:6px 10px;border-radius:4px;
+}
+@media (max-width:920px){
+  .hero .wrap{grid-template-columns:1fr}
+  .hero-sheet{max-width:560px}
+}
+
+/* ── The signature: a takeoff sheet that runs itself ───────────── */
+.hero-sheet{
+  background:var(--white);border:1px solid var(--grid);border-radius:8px;
+  box-shadow:var(--shadow);overflow:hidden;
+  font:13px/1.4 var(--mono);
+}
+.sheet-tabs{display:flex;gap:2px;background:var(--row-alt);border-bottom:1px solid var(--grid);padding:8px 10px 0}
+.sheet-tabs span{
+  padding:6px 12px;border:1px solid var(--grid);border-bottom:none;
+  border-radius:5px 5px 0 0;background:#EAEFF6;color:var(--ink-soft);font-size:11px;
+}
+.sheet-tabs .on{background:var(--white);color:var(--ink);font-weight:600}
+.sheet table{width:100%;border-collapse:collapse}
+.sheet th{
+  background:var(--navy);color:#fff;font-weight:500;font-size:11px;
+  text-align:left;padding:7px 9px;letter-spacing:.03em;
+}
+.sheet td{padding:7px 9px;border-bottom:1px solid var(--grid);white-space:nowrap}
+.sheet tr:nth-child(even) td{background:var(--row-alt)}
+.sheet .num{text-align:right}
+.sheet .typ{font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px}
+.typ.scope{background:#DCEFE7;color:var(--ledger-dk)}
+.typ.matl{background:#E4ECF7;color:var(--navy)}
+.typ.labr{background:#F3E8F7;color:#6B3E82}
+.typ.subc{background:#FBEBDD;color:#9A5B1F}
+.typ.auto{background:var(--cell-yellow);color:#7A5A00}
+.sheet .row-anim{opacity:0;transform:translateY(4px);animation:rowIn .45s ease forwards}
+@keyframes rowIn{to{opacity:1;transform:none}}
+.sheet .auto-row td{background:var(--cell-yellow-soft)!important}
+.sheet tfoot td{
+  border-top:2px solid var(--ink);border-bottom:none;
+  font-weight:600;background:var(--white)!important;
+}
+.sheet tfoot .grand{color:var(--ledger-dk);font-size:15px}
+.sheet-caption{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:9px 12px;background:var(--row-alt);border-top:1px solid var(--grid);
+  font-size:11px;color:var(--ink-soft);
+}
+.sheet-caption .run{color:var(--ledger-dk);font-weight:600}
+
+/* ── Pipeline strip ────────────────────────────────────────────── */
+.pipeline{padding:56px 0;border-bottom:1px solid var(--grid)}
+.pipe-row{display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center}
+.pipe{
+  background:var(--white);border:1px solid var(--grid);border-radius:var(--radius);
+  padding:14px 20px;text-align:center;min-width:130px;
+}
+.pipe b{display:block;font:600 14px var(--sans)}
+.pipe small{font:400 12px var(--mono);color:var(--ink-soft)}
+.pipe-arrow{font:600 18px var(--mono);color:var(--ledger);padding:0 14px}
+.pipe-note{text-align:center;margin-top:18px;font:500 13px var(--mono);color:var(--ink-soft)}
+@media (max-width:760px){.pipe-arrow{transform:rotate(90deg);padding:6px 0}.pipe-row{flex-direction:column}}
+
+/* ── Features ──────────────────────────────────────────────────── */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grid);border:1px solid var(--grid);border-radius:8px;overflow:hidden;margin-top:44px}
+.feat{background:var(--white);padding:28px 26px}
+.feat:hover{background:var(--row-alt)}
+.feat .fx{font:600 11px var(--mono);color:var(--ledger);letter-spacing:.06em}
+.feat h3{font:600 17px var(--sans);margin:10px 0 8px}
+.feat p{font-size:14px;color:var(--ink-soft)}
+@media (max-width:880px){.feat-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.feat-grid{grid-template-columns:1fr}}
+
+/* ── Profiles ──────────────────────────────────────────────────── */
+.profiles{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:44px}
+.profile{
+  background:var(--white);border:1px solid var(--grid);border-radius:8px;
+  padding:30px;box-shadow:var(--shadow);
+}
+.profile h3{font:700 21px var(--serif)}
+.profile .who{font:500 12px var(--mono);color:var(--ledger-dk);letter-spacing:.06em;text-transform:uppercase}
+.profile ul{list-style:none;margin-top:16px}
+.profile li{padding:7px 0 7px 24px;font-size:14px;color:var(--ink-soft);position:relative}
+.profile li::before{content:"·";position:absolute;left:8px;color:var(--ledger);font-weight:700}
+.profile .types{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px}
+.profile .types span{font:500 11px var(--mono);background:var(--row-alt);border:1px solid var(--grid);padding:3px 8px;border-radius:3px}
+@media (max-width:820px){.profiles{grid-template-columns:1fr}}
+
+/* ── Pricing ───────────────────────────────────────────────────── */
+#pricing{background:var(--white);border-block:1px solid var(--grid)}
+.trial-banner{
+  margin:40px 0 34px;display:flex;align-items:center;gap:14px;justify-content:center;
+  background:var(--cell-yellow-soft);border:1px dashed #E4C860;border-radius:var(--radius);
+  padding:14px 20px;font:500 14px var(--sans);
+}
+.trial-banner .mono{font-weight:600;color:var(--ledger-dk)}
+.tiers{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;align-items:stretch;max-width:820px;margin:0 auto}
+.tier{
+  background:var(--paper);border:1px solid var(--grid);border-radius:8px;
+  padding:30px 28px;display:flex;flex-direction:column;position:relative;
+}
+.tier.featured{
+  background:var(--white);border-color:var(--navy);
+  box-shadow:var(--shadow);transform:translateY(-8px);
+}
+.tier .flag{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--navy);color:var(--cell-yellow);
+  font:600 11px var(--mono);letter-spacing:.08em;
+  padding:5px 12px;border-radius:99px;white-space:nowrap;
+}
+.tier h3{font:700 22px var(--serif)}
+.tier .for{font-size:13px;color:var(--ink-soft);margin-top:4px;min-height:38px}
+.tier .price{font:600 40px var(--mono);margin:18px 0 2px;letter-spacing:-.02em}
+.tier .price small{font-size:14px;color:var(--ink-soft);font-weight:400}
+.tier .per{font:400 12px var(--mono);color:var(--ink-soft);margin-bottom:20px}
+.tier .btn{justify-content:center;margin-bottom:22px}
+/* feature list styled as ledger rows — row numbers carry the count */
+.tier ol{list-style:none;counter-reset:row;border-top:1px solid var(--grid)}
+.tier ol li{
+  counter-increment:row;
+  display:flex;gap:12px;align-items:baseline;
+  padding:9px 2px;border-bottom:1px solid var(--grid);
+  font-size:14px;
+}
+.tier ol li::before{
+  content:counter(row);
+  font:500 11px var(--mono);color:#9AA7B8;min-width:16px;text-align:right;
+}
+.tier ol li.inherit{color:var(--ink-soft);font-style:italic}
+@media (max-width:880px){
+  .tiers{grid-template-columns:1fr;max-width:460px;margin:0 auto}
+  .tier.featured{transform:none}
+}
+.pricing-fine{margin-top:30px;text-align:center;font-size:13px;color:var(--ink-soft)}
+
+/* ── Resources / community ─────────────────────────────────────── */
+#resources{background:var(--navy);color:#DCE6F1}
+#resources h2{color:#fff}
+#resources .cellref{color:#9FB2CC}
+#resources .cellref::before{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);color:var(--cell-yellow)}
+#resources .sub{color:#AFC0D8}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
+.res{
+  display:block;text-decoration:none;color:inherit;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);
+  border-radius:8px;padding:24px 22px;
+  transition:background .12s ease, border-color .12s ease, transform .12s ease;
+}
+.res:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.35);transform:translateY(-2px)}
+.res .ricon{width:34px;height:34px;margin-bottom:14px;color:var(--cell-yellow)}
+.res b{display:block;font:600 16px var(--sans);color:#fff}
+.res p{font-size:13px;color:#AFC0D8;margin-top:6px}
+.res .rlink{font:500 12px var(--mono);color:var(--cell-yellow);margin-top:12px;display:inline-block}
+@media (max-width:880px){.res-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.res-grid{grid-template-columns:1fr}}
+
+/* ── FAQ ───────────────────────────────────────────────────────── */
+.faq{max-width:760px;margin:44px auto 0}
+.faq details{border-bottom:1px solid var(--grid)}
+.faq summary{
+  font:600 16px var(--sans);padding:18px 4px;cursor:pointer;list-style:none;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+}
+.faq summary::after{content:"+";font:400 22px var(--mono);color:var(--ledger)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{padding:0 4px 20px;color:var(--ink-soft);font-size:15px;max-width:64ch}
+
+/* ── Final CTA + footer ────────────────────────────────────────── */
+.final{border-top:1px solid var(--grid);text-align:center}
+.final h2{max-width:20ch;margin:0 auto}
+.final .cta-row{justify-content:center;display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+footer.site{border-top:1px solid var(--grid);padding:36px 0;font-size:13px;color:var(--ink-soft)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+footer nav{display:flex;gap:18px;flex-wrap:wrap}
+footer a{color:var(--ink-soft);text-decoration:none}
+footer a:hover{color:var(--ink)}
+
+/* scroll-reveal */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .55s ease, transform .55s ease}
+.reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- ═══ Nav ═══ -->
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="#top"><span class="mark">fq</span>fastQuote</a>
+    <nav class="nav-links" aria-label="Site">
+      <a href="#features">Features</a>
+      <a href="#profiles">Who it's for</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#resources">Community</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary" data-link="trial" href="#pricing">Start 30-day trial</a>
+  </div>
+</header>
+
+<!-- ═══ Hero ═══ -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="tagline">Instant estimates. Accelerated business.</div>
+      <h1>From takeoff to <span class="hl">signed quote</span> in one run.</h1>
+      <p class="lede">A headless estimating engine with a VS Code front end. Build a multi-level BOM or construction takeoff in a plain <span class="mono">.xlsx</span>, press <span class="mono">Run All</span>, and get a priced BOQ, vendor POs, overhead &amp; profit, and a customer-ready quote — every time, in seconds. Your own AI assistant can run the whole show.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" data-link="trial" href="#">Start 30-day free trial <span class="arrow">→</span></a>
+        <a class="btn btn-ghost" href="#pricing">See pricing</a>
+      </div>
+      <p class="trial-note" style="margin-top:14px">Full product, no card required. Then $59/month or $600/year.</p>
+      <div class="suite-badges">
+        <span>▣ VS Code</span>
+        <span>▦ Excel &amp; LibreOffice workbooks</span>
+        <span>⌘ Windows · Linux · macOS</span>
+      </div>
+    </div>
+
+    <!-- Signature: the takeoff that runs itself -->
+    <div class="hero-sheet" aria-label="Example: fastQuote pricing a takeoff automatically">
+      <div class="sheet-tabs">
+        <span class="on">Takeoff</span><span>BOQ</span><span>Quote</span><span>PO – Sub_A</span>
+      </div>
+      <div class="sheet">
+        <table>
+          <thead>
+            <tr><th>Item</th><th>Description</th><th>Type</th><th class="num">Qty</th><th class="num">Unit</th><th class="num">Total</th></tr>
+          </thead>
+          <tbody id="sheetRows">
+            <tr class="row-anim" style="animation-delay:.15s"><td>1</td><td>Electrical Scope</td><td><span class="typ scope">SCOPE</span></td><td class="num">1</td><td class="num">—</td><td class="num">—</td></tr>
+            <tr class="row-anim" style="animation-delay:.35s"><td>1.1</td><td>LED Fixtures</td><td><span class="typ matl">MATL</span></td><td class="num">120</td><td class="num">85.00</td><td class="num">10,200</td></tr>
+            <tr class="row-anim" style="animation-delay:.55s"><td>1.2</td><td>Fixture Install</td><td><span class="typ labr">LABR</span></td><td class="num">60</td><td class="num">95.00</td><td class="num">6,840</td></tr>
+            <tr class="row-anim" style="animation-delay:.75s"><td>1.3</td><td>Fire Alarm (sub)</td><td><span class="typ subc">SUBC</span></td><td class="num">1</td><td class="num">18,500</td><td class="num">20,350</td></tr>
+            <tr class="row-anim auto-row" style="animation-delay:1.15s"><td>1.4</td><td>Overhead — 10%</td><td><span class="typ auto">AUTO</span></td><td class="num">1</td><td class="num">3,440</td><td class="num">3,440</td></tr>
+            <tr class="row-anim auto-row" style="animation-delay:1.35s"><td>1.5</td><td>Profit — 15%</td><td><span class="typ auto">AUTO</span></td><td class="num">1</td><td class="num">5,160</td><td class="num">5,160</td></tr>
+          </tbody>
+          <tfoot>
+            <tr class="row-anim" style="animation-delay:1.7s">
+              <td colspan="4">QUOTE TOTAL</td>
+              <td class="num" colspan="2"><span class="grand" id="grandTotal">$45,990</span></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="sheet-caption">
+        <span>electrical.xlsx</span>
+        <span class="run" id="runStatus">▶ Run All</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Pipeline ═══ -->
+<section class="pipeline">
+  <div class="wrap">
+    <div class="pipe-row reveal">
+      <div class="pipe"><b>BOM / Takeoff</b><small>you fill this in</small></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe"><b>BOQ</b><small>exploded quantities</small></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe"><b>Vendor POs</b><small>one sheet per vendor</small></div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe"><b>Quote</b><small>customer-ready sheet</small></div>
+    </div>
+    <p class="pipe-note reveal">One command. Every output. Idempotent — change a quantity, run again, everything follows.</p>
+  </div>
+</section>
+
+<!-- ═══ Features ═══ -->
+<section id="features">
+  <div class="wrap">
+    <span class="cellref" data-ref="B2">WHAT IT DOES</span>
+    <h2>Everything between the takeoff and the handshake</h2>
+    <p class="sub">No spreadsheet lock-in. The GUI lives in VS Code, your workbooks stay plain .xlsx files you edit in Excel or LibreOffice, and one click — or one sentence to your AI assistant — runs the whole pipeline.</p>
+
+    <div class="feat-grid">
+      <div class="feat reveal"><span class="fx mono">=EXPLODE()</span><h3>Multi-level BOMs</h3><p>Item numbers like 1.2.3 drive the whole structure. Assemblies roll up, quantities cascade, and the BOQ lands flat and priced.</p></div>
+      <div class="feat reveal"><span class="fx mono">=VS.Code()</span><h3>Built for VS Code</h3><p>The fastQuote panel lives where your files do: a project tree with warning and unpriced badges, one-click Run All with live phase progress, a schema-validated config editor, and rate-sheet editing right beside your workbooks.</p></div>
+      <div class="feat reveal"><span class="fx mono">=SEE(drawing)</span><h3>AI takeoff from drawings</h3><p>Point fastQuote at a drawing set: a strategy engine extracts the parts lists, classifies layouts, assemblies, and details, and normalizes every row to one canonical schema — priced line items land straight in the BOM. Recursion drills into sub-assemblies; the drill-down pauses for your approval. Supervised: you stay the boss.</p></div>
+      <div class="feat reveal"><span class="fx mono">=CSV→JSON</span><h3>Price book &amp; rate sheets</h3><p>A git-tracked price book remembers every price you ever found — never research a part twice. Rates, markups, and Types live in CSV sheets you edit in Excel; the engine compiles them. Multi-currency included.</p></div>
+      <div class="feat reveal"><span class="fx mono">=OVHD+PRFT</span><h3>Overhead &amp; profit, automatic</h3><p>Percentage rows for overhead, profit, contingency, and bond calculate from each scope's direct cost — and recalculate on every run.</p></div>
+      <div class="feat reveal"><span class="fx mono">=MCP(price)</span><h3>Bring your own AI</h3><p>fastQuote speaks MCP, so your own assistant (Cline or any client) can price unpriced parts across your price book, Octopart, Digi-Key, McMaster, and Grainger. Your key, your models — we never bill tokens.</p></div>
+      <div class="feat reveal"><span class="fx mono">=CHECK()</span><h3>Validated before it's quoted</h3><p>A deterministic rules engine checks every workbook — missing types, unpriced parts, broken hierarchy — with row-level fix hints before your name goes on the number.</p></div>
+      <div class="feat reveal"><span class="fx mono">=git(log)</span><h3>An audit trail by default</h3><p>Every estimate revision, price-book entry, and rate change is committed and diffable. See exactly what a quote cost the day you sent it — months later, in one command.</p></div>
+      <div class="feat reveal"><span class="fx mono">=OPEN(*.*)</span><h3>One window, every file</h3><p>Estimate beside the source: .xlsx workbooks, PDF drawing sets, DWG/DXF CAD, and STEP models all open inside VS Code through its extension ecosystem. No more juggling five programs to price one job.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Profiles ═══ -->
+<section id="profiles" style="padding-top:0">
+  <div class="wrap">
+    <span class="cellref" data-ref="B3">WHO IT'S FOR</span>
+    <h2>Two trades, one engine</h2>
+    <p class="sub">fastQuote ships with two ready-made profiles. Pick one — or define your own Types, markups, and rates in a plain spreadsheet. The profile <em>is</em> the schema: a new cost Type like <span class="mono">CATA</span> works end-to-end with zero code.</p>
+
+    <div class="profiles">
+      <div class="profile reveal">
+        <span class="who">Fabrication &amp; manufacturing</span>
+        <h3>Job shops, machine builders, weldments</h3>
+        <ul>
+          <li>Assemblies, weldments, and purchased parts with per-type markups</li>
+          <li>Material, machining, and labor cost rows injected from your shop rates</li>
+          <li>Vendor price comparison columns — pick the winner per part</li>
+          <li>PO sheet per vendor, ready to send the moment you win</li>
+        </ul>
+        <div class="types"><span>ASSY</span><span>WELD</span><span>PART</span><span>PROC</span><span>LABR</span><span>SHIP</span></div>
+      </div>
+      <div class="profile reveal">
+        <span class="who">Construction estimating</span>
+        <h3>GCs, subs, and specialty trades</h3>
+        <ul>
+          <li>One command scaffolds a whole project: takeoff per discipline + master roll-up</li>
+          <li>Scopes and systems with CSI-style reference numbers</li>
+          <li>Overhead, profit, contingency, and bond injected per scope</li>
+          <li>Status tracking from budgetary through awarded</li>
+        </ul>
+        <div class="types"><span>SCOPE</span><span>SYSTM</span><span>MATL</span><span>LABR</span><span>EQUIP</span><span>SUBC</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Pricing ═══ -->
+<section id="pricing">
+  <div class="wrap">
+    <span class="cellref" data-ref="B4">PRICING</span>
+    <h2>Simple tiers. <span class="hl">30 days free</span> to prove it.</h2>
+    <p class="sub">Every tier starts with a full-featured 30-day trial — no credit card, no crippled features. Buy a license only when it's already winning you quotes.</p>
+
+    <div class="trial-banner reveal">
+      <span>⏱</span>
+      <span>The trial is the <b>complete product</b>. After 30 days, activate any tier with a license key — your workbooks and settings carry straight over.</span>
+    </div>
+
+    <!-- EDIT PRICES HERE ─ update the numbers and buy links (LINKS at top of file) -->
+    <div class="tiers">
+
+      <div class="tier featured reveal">
+        <span class="flag">EVERY FEATURE</span>
+        <h3>fastQuote</h3>
+        <p class="for">One estimator — or ten — who want their afternoons back.</p>
+        <div class="price">$29<small>/mo</small></div>
+        <div class="per">or $299/year · per seat · everything included</div>
+        <a class="btn btn-primary" data-link="trial" href="#">Start 30-day free trial</a>
+        <ol>
+          <li>Full BOM → BOQ → Quote → PO pipeline</li>
+          <li>VS Code extension GUI — project tree, config editor, one-click Run All</li>
+          <li>AI drawing takeoff — 4-layer strategy engine with supervised drill-down</li>
+          <li>MCP server — drive fastQuote from your own AI assistant (Cline or any client)</li>
+          <li>Distributor pricing: Octopart, Digi-Key, McMaster, Grainger</li>
+          <li>Fabrication + construction profiles; price book + rate sheets in CSV</li>
+          <li>Construction master projects — multi-workbook roll-ups</li>
+          <li>Validation engine with row-level fix hints</li>
+          <li>CSV / JSON exports for your ERP</li>
+          <li>Email support</li>
+        </ol>
+      </div>
+
+      <div class="tier reveal">
+        <h3>Enterprise</h3>
+        <p class="for">Shops and GCs that need fastQuote their way.</p>
+        <div class="price">Custom</div>
+        <div class="per">quoted per client · annual contract</div>
+        <a class="btn btn-ghost" data-link="buyEnt" href="#">Talk to us</a>
+        <ol>
+          <li class="inherit">Everything in fastQuote, plus:</li>
+          <li>Customization — profiles, templates, and workflows tailored to your shop</li>
+          <li>Shared price book &amp; rate-sheet workflow (git-based)</li>
+          <li>Central license management + onboarding</li>
+          <li>Enterprise support — priority queue, direct line, SLAs</li>
+        </ol>
+      </div>
+
+    </div>
+
+    <p class="pricing-fine">Prices in USD, per seat. Every feature is in every plan — the only thing Enterprise adds is customization and support. BYO-AI always: fastQuote never hosts, sees, or bills your AI key. 30-day free trial on everything, no card required.</p>
+  </div>
+</section>
+
+<!-- ═══ Resources / Community ═══ -->
+<section id="resources">
+  <div class="wrap">
+    <span class="cellref" data-ref="B5">RESOURCES &amp; COMMUNITY</span>
+    <h2>Never estimate alone</h2>
+    <p class="sub">Templates, configs, tutorials, and other estimators one click away. Everything here is free — trial or licensed.</p>
+
+    <div class="res-grid">
+      <a class="res reveal" data-link="github" href="#">
+        <svg class="ricon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.54-3.87-1.54-.53-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.2.68.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+        <b>GitHub — community rates &amp; templates</b>
+        <p>Community-maintained reference rates ($/lb materials, $/hr by trade, machines by process) and starter workbooks — never part-level prices. CC BY 4.0; PR your shop's rates back in.</p>
+        <span class="rlink">github.com/fastquote-community →</span>
+      </a>
+
+      <a class="res reveal" data-link="discord" href="#">
+        <svg class="ricon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.32 4.37A19.8 19.8 0 0 0 15.36 3c-.21.38-.46.9-.63 1.3a18.3 18.3 0 0 0-5.46 0C9.1 3.9 8.85 3.38 8.63 3a19.74 19.74 0 0 0-4.96 1.38C.54 9.05-.31 13.6.11 18.09a19.9 19.9 0 0 0 6.07 3.06c.49-.66.93-1.37 1.3-2.11-.71-.27-1.39-.6-2.03-.99.17-.12.34-.25.5-.38 3.93 1.8 8.18 1.8 12.06 0 .17.13.33.26.5.38-.64.39-1.32.72-2.03.99.38.74.81 1.44 1.3 2.11a19.85 19.85 0 0 0 6.08-3.06c.5-5.2-.85-9.71-3.54-13.72zM8.68 15.33c-1.18 0-2.15-1.08-2.15-2.42s.95-2.42 2.15-2.42c1.21 0 2.18 1.09 2.16 2.42 0 1.34-.95 2.42-2.16 2.42zm6.64 0c-1.18 0-2.15-1.08-2.15-2.42s.95-2.42 2.15-2.42c1.21 0 2.18 1.09 2.16 2.42 0 1.34-.95 2.42-2.16 2.42z"/></svg>
+        <b>Discord — the estimator floor</b>
+        <p>Ask how someone else structures a takeoff, share a config, get help before your bid is due. The fastest support channel we have.</p>
+        <span class="rlink">Join the server →</span>
+      </a>
+
+      <a class="res reveal" data-link="youtube" href="#">
+        <svg class="ricon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.81zM9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg>
+        <b>YouTube — watch a bid get built</b>
+        <p>Five-minute walkthroughs: your first BOM, the construction workflow, the price book, agent-assisted pricing. Real takeoffs, no slideware.</p>
+        <span class="rlink">Watch tutorials →</span>
+      </a>
+
+      <a class="res reveal" data-link="docs" href="#">
+        <svg class="ricon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15z"/><path d="M20 17H6.5a2.5 2.5 0 0 0 0 5"/><path d="M8 7h8M8 11h5"/></svg>
+        <b>Documentation</b>
+        <p>Installation, the full how-to guide, configuration reference, and the AI integration manual. Searchable, versioned, and honest about edge cases.</p>
+        <span class="rlink">Read the docs →</span>
+      </a>
+
+      <a class="res reveal" data-link="releases" href="#">
+        <svg class="ricon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v13"/><path d="m7 11 5 5 5-5"/><path d="M4 21h16"/></svg>
+        <b>Releases &amp; changelog</b>
+        <p>Every version, what changed, and the download. Licenses include a year of updates — grab them here the day they ship.</p>
+        <span class="rlink">Latest release →</span>
+      </a>
+
+      <a class="res reveal" data-link="support" href="#">
+        <svg class="ricon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        <b>Email support</b>
+        <p>License moves, invoices, purchase orders, or anything you'd rather not post publicly. Enterprise clients get the priority queue.</p>
+        <span class="rlink">support@fastquote.app →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section id="faq">
+  <div class="wrap">
+    <span class="cellref" data-ref="B6">FAQ</span>
+    <h2>Before you ask</h2>
+    <div class="faq">
+      <details>
+        <summary>What exactly happens after the 30-day trial?</summary>
+        <p>The trial is the full product on every tier. On day 31, fastQuote asks for a license key; nothing is deleted and your workbooks stay plain .xlsx files you own either way. Enter a key from any tier and keep working exactly where you left off.</p>
+      </details>
+      <details>
+        <summary>Is it a subscription?</summary>
+        <p>It is one. $59/month or $600/year per seat, everything included — cancel anytime. Enterprise is quoted per client for customization and support. Every plan starts with the same 30-day free trial.</p>
+      </details>
+      <details>
+        <summary>Does my data leave my machine?</summary>
+        <p>Not unless you ask it to. Estimating runs entirely locally on plain .xlsx and CSV files. Pricing lookups only contact distributors when you explicitly run them, and AI-assisted estimating uses your own key with your own provider — fastQuote never hosts, sees, or bills it.</p>
+      </details>
+      <details>
+        <summary>We're a construction shop, not a fab shop — does it fit?</summary>
+        <p>Yes — construction is a first-class profile, not an afterthought. One command scaffolds a project with a takeoff per discipline, a master roll-up, and automatic overhead, profit, contingency, and bond per scope.</p>
+      </details>
+      <details>
+        <summary>Which platforms and office suites?</summary>
+        <p>Windows, Linux, or macOS with VS Code (the fastQuote GUI). Workbooks are plain .xlsx files — open them in Microsoft Excel or LibreOffice Calc, so a mixed shop shares files freely. The Python engine ships inside the installer.</p>
+      </details>
+      <details>
+        <summary>Can I customize the columns, types, and markups?</summary>
+        <p>Everything. Structural layout (columns, headers, colors) is config; all pricing — rates, markups, injection rules, and the Type vocabulary itself — lives in rate-sheet CSVs you edit in Excel or LibreOffice. Add a Type like <span class="mono">CATA</span> and it flows through dropdowns, pricing, and POs. No code, ever.</p>
+      </details>
+      <details>
+        <summary>Do I need an AI subscription?</summary>
+        <p>No — fastQuote is fully usable without any AI. If you want agent-assisted estimating, you bring your own assistant and your own API key; we provide the MCP tool surface, never the tokens. Optional drawing classification (coming later) can also use your own Vision key, stored locally on your machine.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Final CTA ═══ -->
+<section class="final">
+  <div class="wrap">
+    <h2>Your next bid could take <span class="hl">minutes</span>, not evenings.</h2>
+    <div class="cta-row">
+      <a class="btn btn-primary" data-link="trial" href="#">Start your 30-day trial <span class="arrow">→</span></a>
+      <a class="btn btn-ghost" data-link="youtube" href="#">Watch a 5-minute demo</a>
+    </div>
+    <p class="trial-note" style="margin-top:16px">No card. No feature limits. Just your next estimate, faster.</p>
+  </div>
+</section>
+
+<!-- ═══ Footer ═══ -->
+<footer class="site">
+  <div class="wrap">
+    <span>© <span id="year"></span> fastQuote · Instant Estimates. Accelerated Business.</span>
+    <nav aria-label="Footer">
+      <a data-link="github" href="#">GitHub</a>
+      <a data-link="discord" href="#">Discord</a>
+      <a data-link="youtube" href="#">YouTube</a>
+      <a data-link="docs" href="#">Docs</a>
+      <a data-link="releases" href="#">Releases</a>
+      <a data-link="support" href="#">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+// Wire every [data-link] element to the LINKS table at the top of the file
+document.querySelectorAll("[data-link]").forEach(el => {
+  const url = LINKS[el.dataset.link];
+  if (url) {
+    el.href = url;
+    if (!url.startsWith("mailto:")) { el.target = "_blank"; el.rel = "noopener"; }
+  }
+});
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// Scroll reveal (skipped entirely under reduced motion)
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!reduced && "IntersectionObserver" in window) {
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }), { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+} else {
+  document.querySelectorAll(".reveal").forEach(el => el.classList.add("in"));
+}
+
+// Hero: count the quote total up as the sheet "runs"
+// Line totals: 10,200 + 6,840 + 20,350 + 3,440 + 5,160 = 45,990
+const TOTAL = 45990;
+const grand = document.getElementById("grandTotal");
+const runStatus = document.getElementById("runStatus");
+function fmt(n){ return "$" + n.toLocaleString("en-US"); }
+if (reduced) {
+  grand.textContent = fmt(TOTAL);
+  runStatus.textContent = "✓ Done in 2.1s";
+} else {
+  grand.textContent = "$0";   // JS present: start from zero and count up
+  setTimeout(() => {
+    runStatus.textContent = "⟳ Running…";
+    const t0 = performance.now(), dur = 900;
+    (function tick(now){
+      const p = Math.min((now - t0) / dur, 1);
+      grand.textContent = fmt(Math.round(TOTAL * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(tick);
+      else runStatus.textContent = "✓ Done in 2.1s";
+    })(t0);
+  }, 1700);
+}
+</script>
+</body>
+</html>
