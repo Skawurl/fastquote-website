@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fastQuote — Pricing</title>
+<meta name="description" content="fastQuote pricing: $39/mo or $400/yr per seat — every feature included, 30-day free trial. Enterprise adds the closed-loop job-cost layer. Engine API plans from $199/mo.">
+<script>const LINKS={trial:"https://payhip.com/fastquote",buyPro:"https://payhip.com/b/fastquote-pro",buyEnt:"mailto:support@fastquote.app?subject=Enterprise",github:"https://github.com/fastquote-community",discord:"https://discord.gg/fastquote",youtube:"https://youtube.com/@fastquote",docs:"docs.html",releases:"https://github.com/fastquote/releases",support:"mailto:support@fastquote.app"};</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="%23244061"/><text x="16" y="22" font-family="monospace" font-size="15" font-weight="700" fill="%23FFE9A8" text-anchor="middle">fq</text></svg>'>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><span class="mark">fq</span>fastQuote</a>
+    <nav class="nav-links" aria-label="Site">
+      <a href="index.html">Home</a>
+      <a href="desktop.html">Desktop</a>
+      <a href="engine.html">Engine API</a>
+      <a href="pricing.html" class="active">Pricing</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <a class="btn btn-primary" data-link="trial" href="#">Start 30-day trial</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="tagline">PRICING</div>
+      <h1>Simple, transparent.<br><span class="hl">Two products, one engine.</span></h1>
+      <p class="lede">Every tier starts with a full-featured 30-day trial — no credit card, no crippled features. Buy a license only when it is already winning you quotes.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <span class="cellref" data-ref="B1">FOR ESTIMATORS</span>
+    <h2>fastQuote Desktop</h2>
+    <div class="trial-banner reveal"><span>The trial is the <b>complete product</b>. After 30 days, activate with a license key — your workbooks carry straight over.</span></div>
+    <div class="tiers">
+      <div class="tier featured reveal">
+        <span class="flag">BASE FEATURES</span>
+        <h3>fastQuote</h3>
+        <p class="for">One estimator — or ten — who want their afternoons back.</p>
+        <div class="price">$39<small>/mo</small></div>
+        <div class="per">or $400/year &middot; per seat &middot; everything included</div>
+        <a class="btn btn-primary" data-link="trial" href="#">Start 30-day free trial</a>
+        <ol>
+          <li>Full BOM to BOQ to Quote to PO pipeline</li>
+          <li>VS Code extension GUI — project tree, config editor, one-click Run All</li>
+          <li>AI drawing takeoff — 4-layer strategy engine with supervised drill-down</li>
+          <li>MCP server — drive fastQuote from your own AI assistant</li>
+          <li>Distributor pricing: Octopart, Digi-Key, McMaster, Grainger</li>
+          <li>Fabrication + construction profiles; price book + rate sheets in CSV</li>
+          <li>Validation engine with row-level fix hints</li>
+          <li>CSV / JSON exports for your ERP</li>
+          <li>Email support</li>
+        </ol>
+      </div>
+      <div class="tier reveal">
+        <h3>Enterprise</h3>
+        <p class="for">Shops and GCs that need fastQuote their way.</p>
+        <div class="price">Custom</div>
+        <div class="per">quoted per client &middot; annual contract</div>
+        <a class="btn btn-ghost" data-link="buyEnt" href="#">Talk to us</a>
+        <ol>
+          <li class="inherit">Everything in fastQuote, plus:</li>
+          <li>Closed-loop job cost — quote &rarr; PO &rarr; receipt &rarr; invoice &rarr; labor &rarr; job cost</li>
+          <li>AI document intake — vendor quotes, delivery receipts, and invoices extracted, normalized, and filed with their source PDFs (BYO-AI)</li>
+          <li>Three-way match — PO vs receipt vs invoice reconciled with deterministic tolerance rules and row-level discrepancy reports</li>
+          <li>PO commitments — committed cost tracked live per vendor and cost code</li>
+          <li>Labor time log with fully burdened rates — base + workers' comp + payroll tax + overhead from your rate sheets</li>
+          <li>Live job status — estimate vs committed vs actual per job, without waiting for the accountant</li>
+          <li>Receivables — quote to invoice to payment link to bank-statement reconcile</li>
+          <li>Execution pipes — email drafts, PDF quotes/invoices, bank CSV/OFX import (BYO keys; you approve before anything sends)</li>
+          <li>Business profiles — run the same loop as a contractor, service business, or fabricator with zero code changes</li>
+          <li>Multi-seat licensing and central management</li>
+          <li>Custom profiles, templates, and workflows</li>
+          <li>Shared git-based price-book workflow</li>
+          <li>Onboarding and priority support with SLAs</li>
+        </ol>
+      </div>
+    </div>
+    <p class="pricing-fine">Prices in USD, per seat. Every quoting feature is in every plan — Enterprise adds the closed-loop job-cost layer plus customization and support. BYO-AI always: fastQuote never hosts, sees, or bills your AI key. 30-day free trial on everything, no card required.</p>
+  </div>
+</section>
+
+<section id="pricing" style="padding-top:0;">
+  <div class="wrap">
+    <span class="cellref" data-ref="B2">FOR DEVELOPERS &amp; PLATFORMS</span>
+    <h2>fastQuote Engine API</h2>
+    <p class="sub">The same deterministic engine Desktop uses — headless. Plans are named for who they're for; volume is just the dial. A production-grade instant-quote engine — multi-process, validated, rate-data-backed — typically costs $150k+ and 6 months to build. Ours ships in days. Self-serve plans activate immediately; Platform and Marketplace onboarding typically takes 2–4 weeks.</p>
+    <div class="api-tiers">
+      <table class="api-table">
+        <thead><tr><th>Plan</th><th>For</th><th>Monthly fee</th><th>Included calls</th><th>Overage / call</th></tr></thead>
+        <tbody>
+          <tr><td><b>Starter</b></td><td>1&ndash;2 person shops testing instant quoting</td><td><b>$199/mo</b></td><td>500</td><td>$0.35</td></tr>
+          <tr><td><b>Shop</b></td><td>5&ndash;20 person shops with a website quote button</td><td><b>$499/mo</b></td><td>2,500</td><td>$0.20</td></tr>
+          <tr><td><b>Platform</b></td><td>Portals &amp; high-traffic manufacturers</td><td><b>$1,499/mo</b></td><td>10,000</td><td>$0.15</td></tr>
+          <tr><td><b>Marketplace</b></td><td>Marketplaces, CAD/PLM integrations</td><td><b>$3,999/mo</b></td><td>30,000</td><td>$0.10</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="trial-banner reveal"><span>Embedding across <b>your customer base</b> — ERP vendors, distributors, OEM? That's a custom annual contract (typically $50k&ndash;$250k+/yr) with integration engineering. Sold by conversation, not from this table.</span></div>
+    <p style="text-align:center;margin-top:20px;font-size:13px;color:var(--ink-soft);">The anchor: at $199/mo, the engine costs less than two hours of an estimator's time — and handles 500 quotes a month. Free dev sandbox (100 calls/mo). Support and engine updates included in every plan. SDKs, webhooks, and SLAs ship with the API at launch — pricing finalized at launch.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="cellref" data-ref="B3">EXAMPLE</span>
+    <h2>What a shop pays</h2>
+    <div class="engine-grid" style="margin-top:28px;">
+      <div class="eng-card reveal"><span class="ex mono">STARTER</span><h3>1&ndash;2 person shop</h3><p>About 500 RFQs/month testing instant quoting.</p><div class="math">$199/mo</div><p style="font-size:12px;color:var(--ink-soft);">Starter — 500 calls included</p></div>
+      <div class="eng-card reveal"><span class="ex mono">SHOP</span><h3>Established fabrication shop</h3><p>About 2,500 RFQs/month, website quote button.</p><div class="math">$499/mo</div><p style="font-size:12px;color:var(--ink-soft);">Shop plan — 2,500 calls included</p></div>
+      <div class="eng-card reveal"><span class="ex mono">PLATFORM</span><h3>Instant-quote portal</h3><p>About 10,000 RFQs/month, white-label.</p><div class="math">$1,499/mo</div><p style="font-size:12px;color:var(--ink-soft);">Platform plan — 10,000 calls included</p></div>
+      <div class="eng-card reveal"><span class="ex mono">MARKETPLACE</span><h3>Marketplace / ERP partner</h3><p>Embedding across a customer base, 25,000+ RFQs/month.</p><div class="math">$3,999/mo or $50k&ndash;$250k/yr custom</div><p style="font-size:12px;color:var(--ink-soft);">Marketplace plan or Enterprise contract</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> fastQuote &middot; Instant Estimates. Accelerated Business.</span>
+    <nav aria-label="Footer">
+      <a data-link="github" href="#">GitHub</a>
+      <a data-link="discord" href="#">Discord</a>
+      <a data-link="youtube" href="#">YouTube</a>
+      <a data-link="docs" href="#">Docs</a>
+      <a data-link="releases" href="#">Releases</a>
+      <a data-link="support" href="#">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>

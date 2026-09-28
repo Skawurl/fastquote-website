@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fastQuote Desktop — Quote faster, win more work</title>
+<meta name="description" content="fastQuote Desktop turns a Bill of Materials into a priced, customer-ready quote in one run. VS Code + CLI + MCP. No ERP required.">
+<script>const LINKS={trial:"https://payhip.com/fastquote",buyPro:"https://payhip.com/b/fastquote-pro",buyEnt:"mailto:support@fastquote.app?subject=Enterprise",github:"https://github.com/fastquote-community",discord:"https://discord.gg/fastquote",youtube:"https://youtube.com/@fastquote",docs:"docs.html",releases:"https://github.com/fastquote/releases",support:"mailto:support@fastquote.app"};</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="%23244061"/><text x="16" y="22" font-family="monospace" font-size="15" font-weight="700" fill="%23FFE9A8" text-anchor="middle">fq</text></svg>'>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><span class="mark">fq</span>fastQuote</a>
+    <nav class="nav-links" aria-label="Site">
+      <a href="desktop.html" class="active">Desktop</a>
+      <a href="engine.html">Engine API</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <a class="btn btn-primary" data-link="trial" href="#">Start 30-day trial</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="tagline">FASTQUOTE DESKTOP &middot; FOR ESTIMATORS</div>
+      <h1>Quote faster.<br>Win more work.</h1>
+      <p class="lede">A Bill of Materials processor built for machine builders and manufacturers who need accurate, professional quotes in minutes — not days. No ERP required.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="pricing.html">View Pricing <span class="arrow">&rarr;</span></a>
+        <a class="btn btn-ghost" href="docs.html">Installation Guide</a>
+      </div>
+      <div class="suite-badges">
+        <span>Machine builders</span><span>Job shops</span><span>Contract manufacturers</span><span>LibreOffice &amp; Excel</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="pipeline">
+  <div class="wrap">
+    <span class="cellref" data-ref="A1">WORKFLOW</span>
+    <h2>Four steps to a quote</h2>
+    <p class="sub">One command processes your BOM, explodes quantities, applies markup, and produces a clean customer-facing quote sheet — all inside the same workbook.</p>
+    <div class="pipe-row" style="margin-top:28px;">
+      <div class="pipe"><b>1. Build</b><small>Fill your BOM sheet</small></div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe"><b>2. Price</b><small>Add vendor costs</small></div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe"><b>3. Run</b><small>One command</small></div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe"><b>4. Send</b><small>Customer-ready quote</small></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="cellref" data-ref="B2">CAPABILITIES</span>
+    <h2>Built for <span class="hl">real shop work</span></h2>
+    <div class="feat-grid">
+      <div class="feat reveal"><span class="fx mono">=TREE()</span><h3>Multi-level BOM tree</h3><p>Dot-notation item numbers (1, 1.1, 1.2.1) auto-detect parent-child relationships.</p></div>
+      <div class="feat reveal"><span class="fx mono">=SUMIF()</span><h3>Auto cost roll-up</h3><p>Parent rows sum children costs. Change a vendor price, the whole assembly updates.</p></div>
+      <div class="feat reveal"><span class="fx mono">=VLOOKUP()</span><h3>Dynamic markup by type</h3><p>Set markup percent per part type in a Data sheet. Formulas update live.</p></div>
+      <div class="feat reveal"><span class="fx mono">=QUOTE()</span><h3>Customer-ready quote sheet</h3><p>A clean, printable Quote tab with project info, line items, subtotal, tax, and configurable terms.</p></div>
+      <div class="feat reveal"><span class="fx mono">=LOCAL()</span><h3>No ERP needed</h3><p>Runs entirely in LibreOffice or Excel. Python + openpyxl under the hood.</p></div>
+      <div class="feat reveal"><span class="fx mono">=IMPORT()</span><h3>ERP-ready data prep</h3><p>Run fastQuote as a first pass before ERP entry — validate, quote, then import later.</p></div>
+    </div>
+  </div>
+</section>
+<section id="pricing">
+  <div class="wrap">
+    <span class="cellref" data-ref="B3">PRICING</span>
+    <h2>All features. <span class="hl">One price.</span></h2>
+    <div class="trial-banner reveal"><span>The trial is the <b>complete product</b>. After 30 days, activate with a license key — your workbooks carry straight over.</span></div>
+    <div class="tiers">
+      <div class="tier featured reveal">
+        <span class="flag">ALL FEATURES</span>
+        <h3>fastQuote Desktop</h3>
+        <p class="for">For estimators who want their afternoons back.</p>
+        <div class="price">$39<small>/mo</small></div>
+        <div class="per">or $400/year &middot; per seat</div>
+        <a class="btn btn-primary" data-link="trial" href="#">Start 30-day free trial</a>
+        <ol>
+          <li>Full BOM to BOQ to Quote to PO pipeline</li>
+          <li>VS Code extension GUI — project tree, config editor, Run All</li>
+          <li>AI drawing takeoff — 4-layer strategy engine</li>
+          <li>MCP server — drive fastQuote from your own AI assistant</li>
+          <li>Distributor pricing: Octopart, Digi-Key, McMaster, Grainger</li>
+          <li>Fabrication + construction profiles; price book + rate sheets</li>
+          <li>Validation engine with row-level fix hints</li>
+          <li>Email support</li>
+        </ol>
+      </div>
+      <div class="tier reveal">
+        <h3>Enterprise</h3>
+        <p class="for">Shops and GCs that need fastQuote their way.</p>
+        <div class="price">Custom</div>
+        <div class="per">quoted per client &middot; annual contract</div>
+        <a class="btn btn-ghost" data-link="buyEnt" href="#">Talk to us</a>
+        <ol>
+          <li class="inherit">Everything in fastQuote, plus:</li>
+          <li>Closed-loop job cost — POs, receipts, invoices, labor, live job status</li>
+          <li>Custom profiles, templates, and workflows</li>
+          <li>Shared git-based price-book workflow</li>
+          <li>Central license management + onboarding</li>
+          <li>Priority support with SLAs</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> fastQuote &middot; Instant Estimates. Accelerated Business.</span>
+    <nav aria-label="Footer">
+      <a data-link="github" href="#">GitHub</a>
+      <a data-link="discord" href="#">Discord</a>
+      <a data-link="youtube" href="#">YouTube</a>
+      <a data-link="docs" href="#">Docs</a>
+      <a data-link="releases" href="#">Releases</a>
+      <a data-link="support" href="#">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>

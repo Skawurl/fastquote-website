@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fastQuote Engine API — The Stripe for Manufacturing</title>
+<meta name="description" content="Headless white-label pricing API. Embed fastQuote in your job-shop portal, ERP, or CAD plugin. Plans from $199/mo — less than two hours of an estimator's time. Zero AI COGS.">
+<script>const LINKS={trial:"https://payhip.com/fastquote",buyPro:"https://payhip.com/b/fastquote-pro",buyEnt:"mailto:support@fastquote.app?subject=Enterprise",github:"https://github.com/fastquote-community",discord:"https://discord.gg/fastquote",youtube:"https://youtube.com/@fastquote",docs:"docs.html",releases:"https://github.com/fastquote/releases",support:"mailto:support@fastquote.app"};</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="%23244061"/><text x="16" y="22" font-family="monospace" font-size="15" font-weight="700" fill="%23FFE9A8" text-anchor="middle">fq</text></svg>'>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><span class="mark">fq</span>fastQuote</a>
+    <nav class="nav-links" aria-label="Site">
+      <a href="index.html">Home</a>
+      <a href="desktop.html">Desktop</a>
+      <a href="engine.html" class="active">Engine API</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <a class="btn btn-primary" data-link="trial" href="#">Start 30-day trial</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="tagline">FASTQUOTE ENGINE API &middot; FOR PLATFORMS &amp; DEVELOPERS</div>
+      <h1>The insta-quote API<br>for custom Manufacturing.</h1>
+      <p class="lede">A headless, white-label pricing API. Embed our deterministic pricing engine into your job-shop portal, ERP platform, or CAD plugin. Committed monthly plans, zero AI COGS, zero UI liability.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="pricing.html">View API Pricing <span class="arrow">&rarr;</span></a>
+        <a class="btn btn-ghost" href="docs.html">API Documentation</a>
+      </div>
+      <div class="suite-badges"><span>Job-shop portals</span><span>ERP platforms</span><span>CAD plugins</span><span>Marketplace RFQ</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="pipeline">
+  <div class="wrap">
+    <span class="cellref" data-ref="A1">HOW IT WORKS</span>
+    <h2>Your customers upload. We price. You bill.</h2>
+    <p class="sub">The same engine that powers fastQuote Desktop — now available as an API. White-label, committed plans, zero AI COGS.</p>
+    <div class="pipe-row" style="margin-top:28px;">
+      <div class="pipe"><b>1. Upload</b><small>STEP, DXF, PDF, XLSX</small></div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe"><b>2. Extract</b><small>Strategy engine parses</small></div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe"><b>3. Price</b><small>Your shop rates applied</small></div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe"><b>4. Quote</b><small>Priced BOM returned</small></div>
+    </div>
+    <p class="pipe-note">Your portal presents the price. Your brand, your customer relationship. fastQuote is invisible.</p>
+  </div>
+</section>
+
+<section id="who">
+  <div class="wrap">
+    <span class="cellref" data-ref="B2">WHO IT'S FOR</span>
+    <h2>Built for platforms, <span class="hl">not end users</span></h2>
+    <div class="engine-grid">
+      <div class="eng-card reveal"><span class="ex mono">SHOP</span><h3>Custom job shops</h3><p>Laser cutting, CNC, 3D printing — any shop that wants an instant-quote button. You have the machines; we have the pricing engine.</p><div class="math">1 shop x 5,000 RFQs/mo = $1,499/mo on Platform</div></div>
+      <div class="eng-card reveal"><span class="ex mono">ERP</span><h3>ERP &amp; shop management</h3><p>Paperless Parts, JobBOSS, ProShop, Odoo — embed our engine into your platform. Bulk licensing, volume discounts.</p><div class="math">Enterprise deals from $50k-250k/yr</div></div>
+      <div class="eng-card reveal"><span class="ex mono">MKT</span><h3>Marketplace platforms</h3><p>Building the next Xometry or Fictiv? Our API handles RFQ ingestion — receive a drawing, return a priced BOM in seconds.</p></div>
+      <div class="eng-card reveal"><span class="ex mono">CAD</span><h3>CAD plugin ecosystems</h3><p>Autodesk Fusion, SolidWorks, Onshape — integrate pricing directly into the design environment. MCP-native.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="cellref" data-ref="B3">WHY FASTQUOTE ENGINE</span>
+    <h2>Headless means <span class="hl">zero UI liability</span></h2>
+    <div class="feat-grid">
+      <div class="feat reveal"><span class="fx mono">=API()</span><h3>Zero UI to maintain</h3><p>We ship an API. You build the front end. No browser compatibility, no responsive design, no login flows.</p></div>
+      <div class="feat reveal"><span class="fx mono">=$0()</span><h3>$0 AI COGS</h3><p>BYO-AI architecture: your agent drives our MCP server. We never embed or bill an LLM.</p></div>
+      <div class="feat reveal"><span class="fx mono">=AUDIT()</span><h3>Deterministic pricing</h3><p>Every dollar is traceable to a rate sheet + material property. No AI hallucination, no black-box math.</p></div>
+      <div class="feat reveal"><span class="fx mono">=LEARN()</span><h3>Self-improving engine</h3><p>Every new drawing format becomes a permanent capability. The strategy library compounds across all customers.</p></div>
+      <div class="feat reveal"><span class="fx mono">=MCP()</span><h3>MCP-native</h3><p>57-tool MCP server. Your AI agent drives the engine directly — no SDK, no REST wrapper needed.</p></div>
+      <div class="feat reveal"><span class="fx mono">=SCALE()</span><h3>Trivial against the alternative</h3><p>Building an instant-quote engine in-house: $150k+ and ~6 months of engineering. Here: plans from $199/mo, shipped in a week.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> fastQuote &middot; Instant Estimates. Accelerated Business.</span>
+    <nav aria-label="Footer">
+      <a data-link="github" href="#">GitHub</a>
+      <a data-link="discord" href="#">Discord</a>
+      <a data-link="youtube" href="#">YouTube</a>
+      <a data-link="docs" href="#">Docs</a>
+      <a data-link="releases" href="#">Releases</a>
+      <a data-link="support" href="#">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>

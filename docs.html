@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fastQuote — Documentation</title>
+<meta name="description" content="Installation, configuration, and usage guides for fastQuote Desktop and Engine API.">
+<script>const LINKS={trial:"https://payhip.com/fastquote",buyPro:"https://payhip.com/b/fastquote-pro",buyEnt:"mailto:support@fastquote.app?subject=Enterprise",github:"https://github.com/fastquote-community",discord:"https://discord.gg/fastquote",youtube:"https://youtube.com/@fastquote",docs:"docs.html",releases:"https://github.com/fastquote/releases",support:"mailto:support@fastquote.app"};</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="%23244061"/><text x="16" y="22" font-family="monospace" font-size="15" font-weight="700" fill="%23FFE9A8" text-anchor="middle">fq</text></svg>'>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><span class="mark">fq</span>fastQuote</a>
+    <nav class="nav-links" aria-label="Site">
+      <a href="index.html">Home</a>
+      <a href="desktop.html">Desktop</a>
+      <a href="engine.html">Engine API</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="docs.html" class="active">Docs</a>
+    </nav>
+    <a class="btn btn-primary" data-link="trial" href="#">Start 30-day trial</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="tagline">DOCUMENTATION</div>
+      <h1>Everything you need<br>to get started.</h1>
+      <p class="lede">Installation, configuration, CLI commands, rate sheets, drawing takeoff, and the MCP server guide.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+<div class="docs-grid">
+  <aside class="docs-sidebar">
+    <h4>Getting Started</h4>
+    <ul>
+      <li><a href="#installation">Installation</a></li>
+      <li><a href="#quickstart">Quick Start</a></li>
+      <li><a href="#configuration">Configuration</a></li>
+    </ul>
+    <h4 style="margin-top:24px;">Usage</h4>
+    <ul>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#bom-structure">BOM Structure</a></li>
+      <li><a href="#pricing-providers">Pricing &amp; Vendors</a></li>
+      <li><a href="#rate-sheets">Rate Sheets</a></li>
+      <li><a href="#takeoff">Drawing Takeoff</a></li>
+    </ul>
+    <h4 style="margin-top:24px;">Advanced</h4>
+    <ul>
+      <li><a href="#mcp-server">MCP Server</a></li>
+      <li><a href="#api-providers">API Pricing Providers</a></li>
+      <li><a href="#validation">Validation</a></li>
+      <li><a href="#config-reference">Config Reference</a></li>
+    </ul>
+  </aside>
+
+  <main class="docs-content">
+
+<h2 id="installation">Installation</h2>
+
+<h3>Prerequisites</h3>
+<table><tr><th>Requirement</th><th>Minimum</th><th>Notes</th></tr>
+<tr><td>Python</td><td>3.10+</td><td>3.11 or 3.12 recommended</td></tr>
+<tr><td>VS Code</td><td>Any recent</td><td>With the Python extension</td></tr>
+<tr><td>openpyxl</td><td>3.1+</td><td>Only required dependency</td></tr></table>
+
+<h3>Setup</h3>
+<ol>
+  <li>Clone the repository or download the latest release</li>
+  <li>Create a virtual environment: <code>python -m venv .venv</code></li>
+  <li>Activate it: <code>source .venv/bin/activate</code> (Linux/macOS) or <code>.venv\Scripts\Activate.ps1</code> (Windows)</li>
+  <li>Install: <code>pip install openpyxl</code></li>
+</ol>
+
+<h3>Verify</h3>
+<pre>python -c "import openpyxl; print(openpyxl.__version__)"
+python app/fastQuote.py template test.xlsx</pre>
+<p>If you see <code>Template: test.xlsx</code> you are ready.</p>
+
+<h3>Optional: VS Code Extension</h3>
+<p>Open the <code>extension/</code> folder in VS Code, run <code>npm install</code>, then press F5 to launch. The extension provides a project tree view, inline Run / Validate buttons, and a config editor with JSON schema validation.</p>
+
+<h3>Optional: MCP Server</h3>
+<pre>pip install "mcp[cli]" httpx
+python mcp_server.py</pre>
+<p>Exposes 57 tools your AI agent can drive directly.</p>
+
+<hr>
+
+<h2 id="quickstart">Quick Start</h2>
+<pre># Generate a blank template workbook
+python app/fastQuote.py template MyProject.xlsx
+
+# Open in Excel or LibreOffice, fill in BOM data, save
+
+# Process everything and generate all outputs
+python app/fastQuote.py run MyProject.xlsx</pre>
+<p>The <code>run</code> command handles everything: BOM processing, BOQ generation, Quote sheet, Warnings, and vendor purchase orders.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Generate a default config:</p>
+<pre>python app/fastQuote.py config</pre>
+<p>Key sections in <code>bom_config.json</code>: <b>columns</b> (1-based Excel positions), <b>sheet_names</b>, <b>folder_types</b>, <b>settings</b> (start row, max tree depth).</p>
+<p>Estimator data (types, markups, rates, UOMs, vendors) lives in <code>rates.csv</code> — edit in Excel, then <code>rates sync</code> compiles to <code>rates.json</code>. Never hand-edit rates.json.</p>
+
+<hr>
+<h2 id="commands">Commands</h2>
+<table><tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>run</code></td><td>ALL-IN-ONE: BOM, BOQ, Summary, Quote, PO, Warnings</td></tr>
+<tr><td><code>template</code></td><td>Creates a fresh template workbook</td></tr>
+<tr><td><code>process</code></td><td>Processes BOM only (auto-level, formulas, formatting)</td></tr>
+<tr><td><code>boq</code></td><td>Generates BOQ and Summary sheets</td></tr>
+<tr><td><code>quote</code></td><td>Generates a customer-ready Quote sheet</td></tr>
+<tr><td><code>validate</code></td><td>Runs deterministic validation rules</td></tr>
+<tr><td><code>config</code></td><td>Generates a default bom_config.json</td></tr>
+<tr><td><code>rates sync</code></td><td>Compiles rates.csv into rates.json</td></tr>
+<tr><td><code>rates status</code></td><td>Checks for rate sheet drift</td></tr>
+<tr><td><code>estimate</code></td><td>Scaffolds a new estimate project folder</td></tr>
+<tr><td><code>import_csv</code></td><td>Imports a CSV BOM into a workbook</td></tr></table>
+
+<hr>
+<h2 id="bom-structure">BOM Structure</h2>
+<p>Dot-notation item numbers define hierarchy. <b>Folder types</b> (ASSY, WELD) own children. <b>Leaf types</b> (PART, PROC, MATL, LABR) carry costs. Add new types in <code>rates.csv</code> — zero code changes.</p>
+<p><b>Weight resolution:</b> CAD mass, volume times density, or DXF profile area times thickness. Never guessed.</p>
+
+<hr>
+<h2 id="pricing-providers">Pricing and Vendors</h2>
+<p>Provider chain (first non-empty wins): Price Book &rarr; Octopart &rarr; Digi-Key &rarr; McMaster &rarr; Grainger. Unpriced parts: your AI agent researches and records via <code>price_book_upsert</code>.</p>
+
+<hr>
+<h2 id="rate-sheets">Rate Sheets</h2>
+<p>Shop economics in <code>rates.csv</code>: <b>type</b>, <b>markup</b>, <b>injection</b>, <b>material</b> ($/lb by grade), <b>machining</b>, <b>welding</b>, <b>burn</b> ($/in^2), <b>coat</b> ($/in^2), <b>uom</b>, <b>header</b>. Rate kinds: <code>rate_per_lb</code>, <code>hrs_per_lb</code>+<code>rate_per_hr</code>, <code>pct_of_cost</code>, <code>rate_per_uom</code>, <code>rate_per_sqin</code>, <code>flat</code>.</p>
+
+<hr>
+<h2 id="takeoff">Drawing Takeoff</h2>
+<p>Four-layer Strategy Engine: <b>Extract</b> (AI reads drawing) &rarr; <b>Normalize</b> (Python to canonical CSV) &rarr; <b>Match</b> (Python to cost templates) &rarr; <b>Compile</b> (Python to BOM rows).</p>
+
+<hr>
+<h2 id="mcp-server">MCP Server</h2>
+<p>57 tools your AI agent can drive: BOM inspection, vendor pricing, price book, validation, rate sheets, pipeline, takeoff, strategy engine.</p>
+
+<hr>
+<h2 id="validation">Validation</h2>
+<p><code>python app/fastQuote.py validate MyProject.xlsx</code>. Checks missing prices, broken hierarchies, type consistency, rate drift. Severity-coded with row numbers and fix hints.</p>
+
+  </main>
+</div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> fastQuote &middot; Instant Estimates. Accelerated Business.</span>
+    <nav aria-label="Footer">
+      <a data-link="github" href="#">GitHub</a>
+      <a data-link="discord" href="#">Discord</a>
+      <a data-link="youtube" href="#">YouTube</a>
+      <a data-link="docs" href="#">Docs</a>
+      <a data-link="releases" href="#">Releases</a>
+      <a data-link="support" href="#">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>
