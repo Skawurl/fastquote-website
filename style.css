@@ -304,8 +304,9 @@ footer nav{display:flex;gap:18px;flex-wrap:wrap}
 footer a{color:var(--ink-soft);text-decoration:none}
 footer a:hover{color:var(--ink)}
 
-/* scroll-reveal */
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .55s ease, transform .55s ease}
+/* scroll-reveal — armed by site.js: without JS (or if site.js breaks),
+   .reveal content is never hidden */
+html.reveal-armed .reveal{opacity:0;transform:translateY(14px);transition:opacity .55s ease, transform .55s ease}
 .reveal.in{opacity:1;transform:none}
 /* ── Multi-page nav active state ── */
 .nav-links a.active{color:var(--ink);font-weight:600}
