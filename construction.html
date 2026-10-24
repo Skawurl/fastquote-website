@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fastQuote for Construction</title>
+<meta name="description" content="fastQuote for specialty and trade contractors: one estimate per discipline, plan takeoff, CSI codes, project-level costs, contingency, bond and alternates, and one combined bid. Your rates, your files, your machine.">
+<script>const LINKS={beta:"mailto:support@fastquote.app?subject=fastQuote%20closed%20beta",trial:"https://payhip.com/fastquote",buyPro:"https://payhip.com/b/fastquote-pro",buyEnt:"mailto:support@fastquote.app?subject=Enterprise",github:"https://github.com/fastquote-community",discord:"https://discord.gg/fastquote",youtube:"https://youtube.com/@fastquote",docs:"docs.html",releases:"https://github.com/fastquote/releases",support:"mailto:support@fastquote.app"};</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"></noscript>
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="%23244061"/><text x="16" y="22" font-family="monospace" font-size="15" font-weight="700" fill="%23FFE9A8" text-anchor="middle">fq</text></svg>'>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><span class="mark">fq</span>fastQuote</a>
+    <nav class="nav-links" aria-label="Site">
+      <a href="index.html">Home</a>
+      <a href="construction.html" class="active">Construction</a>
+      <a href="tools.html">3D &amp; Takeoff</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <a class="btn btn-primary" data-link="beta" href="#">Join the closed beta</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="tagline">FASTQUOTE FOR CONSTRUCTION &middot; SPECIALTY &amp; TRADE CONTRACTORS</div>
+      <h1>Every discipline.<br><span class="hl">One bid you can defend.</span></h1>
+      <p class="lede">Estimate each discipline in its own workbook, roll them up into one summary, and send one combined bid &mdash; with project-level costs, contingency, bond and alternates handled the way bids actually work. Your rates, your files, your machine.</p>
+      <p class="lede" style="font-size:14px;"><b>Built and working in our tests; not yet field-tested on real bids, and not part of the closed beta.</b> We are looking for construction design partners to quote real jobs with us.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="mailto:support@fastquote.app?subject=Construction%20design%20partner">Become a design partner <span class="arrow">&rarr;</span></a>
+        <a class="btn btn-ghost" href="#bid">See how the bid is built</a>
+      </div>
+      <div class="suite-badges">
+        <span>Architectural</span><span>Structural</span><span>Electrical</span><span>Mechanical / HVAC</span><span>Civil / Site</span><span>Your own disciplines</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pipeline">
+  <div class="wrap">
+    <span class="cellref" data-ref="A1">WORKFLOW</span>
+    <h2>From plan set to <span class="hl">total contract value</span></h2>
+    <div class="pipe-row" style="margin-top:28px;">
+      <div class="pipe"><b>1. Take off</b><small>Plans, schedules, bid forms</small></div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe"><b>2. Price</b><small>A workbook per discipline</small></div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe"><b>3. Roll up</b><small>One summary, one Run All</small></div>
+      <span class="pipe-arrow">&rarr;</span>
+      <div class="pipe"><b>4. Bid</b><small>One combined quote PDF</small></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="cellref" data-ref="B1">TAKEOFF</span>
+    <h2>Start from what <span class="hl">the GC sends you</span></h2>
+    <div class="feat-grid">
+      <div class="feat">
+        <span class="fx mono">=PLANS()</span>
+        <h3>PDF plans</h3>
+        <p>Measure lengths, areas and counts on scaled sheets with <a href="tools.html#fasttakeoff">fastTakeoff</a>, inside fastQuote. Quantities arrive with waste and CSI codes in the right discipline.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=CAD()</span>
+        <h3>CAD plans</h3>
+        <p>DXF plans are measured by the engine &mdash; lengths and areas by layer &mdash; so the geometry comes from the drawing, not from a guess.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=SCHEDULE()</span>
+        <h3>Schedules &amp; bid forms</h3>
+        <p>Door, fixture and equipment schedules and owner bid forms become estimate rows. Your own AI assistant reads them if you use one; alternates on the bid form stay out of the base bid.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="bid">
+  <div class="wrap">
+    <span class="cellref" data-ref="C1">THE BID</span>
+    <h2>The parts of a bid <span class="hl">spreadsheets get wrong</span></h2>
+    <div class="profiles">
+      <div class="profile">
+        <div class="who">Per discipline</div>
+        <h3>Your costs, your markups</h3>
+        <ul>
+          <li>Material, labor, equipment, subcontract, permits and consumables as their own cost types</li>
+          <li>Overhead and profit set per cost type &mdash; the markup is calculated, not typed</li>
+          <li>Waste factor per cost type, applied to unit cost</li>
+          <li>CSI code on every row; units in LF, SF, SY, CY, SQ, LS and more</li>
+        </ul>
+        <div class="types"><span>MATL</span><span>LABR</span><span>EQUIP</span><span>SUBC</span><span>PERM</span><span>CONS</span></div>
+      </div>
+      <div class="profile">
+        <div class="who">On the summary</div>
+        <h3>Project-level costs, done right</h3>
+        <ul>
+          <li>General conditions and other project costs as a lump sum, % of direct, % of sell, or hours &times; rate</li>
+          <li>Show each one as its own line, or spread it across the disciplines to the cent</li>
+          <li>Contingency on the whole job; bond as a share of the contract, grossed up</li>
+          <li>One combined quote PDF: a section per discipline and the total contract value</li>
+        </ul>
+        <div class="types"><span>SCOPE</span><span>SYSTM</span><span>CONT</span><span>BOND</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="cellref" data-ref="D1">WHY FASTQUOTE</span>
+    <h2>Built on the same <span class="hl">engine</span></h2>
+    <div class="feat-grid">
+      <div class="feat">
+        <span class="fx mono">=TRUST()</span>
+        <h3>Every dollar traceable</h3>
+        <p>Each number comes from a quantity, a rate or a markup rule you can point to. No AI sets a price.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=TERMS()</span>
+        <h3>A bid, not a price list</h3>
+        <p>Sales tax on or off, validity and expiry, exclusions and clarifications, alternates priced but kept out of the total, and a compare between bid revisions.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=LOCAL()</span>
+        <h3>Your numbers stay yours</h3>
+        <p>Your unit costs and bid history never leave your machine &mdash; or your server, on <a href="pricing.html">Enterprise</a>. No cloud, no data collection.</p>
+      </div>
+    </div>
+    <p class="pricing-fine">Construction is included in every fastQuote plan &mdash; no add-on price. We will say &ldquo;field-tested&rdquo; here once real bids have been quoted with it.</p>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> fastQuote &middot; Instant Estimates. Accelerated Business.</span>
+    <nav aria-label="Footer">
+      <a data-link="github" href="#">GitHub</a>
+      <a data-link="discord" href="#">Discord</a>
+      <a data-link="youtube" href="#">YouTube</a>
+      <a data-link="docs" href="#">Docs</a>
+      <a data-link="releases" href="#">Releases</a>
+      <a href="engine.html">Build on the engine</a>
+      <a data-link="support" href="#">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script data-goatcounter="https://fast-quote.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="site.js"></script>
+</body>
+</html>
