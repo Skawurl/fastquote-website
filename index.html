@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>fastQuote — Quote faster. Win more work.</title>
 <meta name="description" content="Turn a Bill of Materials into a customer-ready quote in one run. Local-first estimating for machine builders and job shops, with built-in AI drawing takeoff. Your rates, your data, your machine — no ERP, no AI bills, no cloud.">
-<script>const LINKS={trial:"https://payhip.com/fastquote",buyPro:"https://payhip.com/b/fastquote-pro",buyEnt:"mailto:support@fastquote.app?subject=Enterprise",github:"https://github.com/fastquote-community",discord:"https://discord.gg/fastquote",youtube:"https://youtube.com/@fastquote",docs:"docs.html",releases:"https://github.com/fastquote/releases",support:"mailto:support@fastquote.app"};</script>
+<script>const LINKS={beta:"mailto:support@fastquote.app?subject=fastQuote%20closed%20beta",trial:"https://payhip.com/fastquote",buyPro:"https://payhip.com/b/fastquote-pro",buyEnt:"mailto:support@fastquote.app?subject=Enterprise",github:"https://github.com/fastquote-community",discord:"https://discord.gg/fastquote",youtube:"https://youtube.com/@fastquote",docs:"docs.html",releases:"https://github.com/fastquote/releases",support:"mailto:support@fastquote.app"};</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -19,12 +19,11 @@
   <div class="wrap nav">
     <a class="logo" href="index.html"><span class="mark">fq</span>fastQuote</a>
     <nav class="nav-links" aria-label="Site">
-      <a href="desktop.html">Desktop</a>
-      <a href="engine.html">Engine API</a>
+      <a href="tools.html">3D &amp; Takeoff</a>
       <a href="pricing.html">Pricing</a>
       <a href="docs.html">Docs</a>
     </nav>
-    <a class="btn btn-primary" data-link="trial" href="#">Start 30-day trial</a>
+    <a class="btn btn-primary" data-link="beta" href="#">Join the closed beta</a>
   </div>
 </header>
 
@@ -36,16 +35,16 @@
       <h1>Quote faster.<br>Win more work.</h1>
       <p class="lede">Turn a Bill of Materials into a professional, customer-ready quote in one run — inside the Excel and LibreOffice workbooks you already use. Your rates. Your data. Your machine. No ERP. No AI bills. No cloud.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" data-link="trial" href="#">Start 30-day free trial <span class="arrow">&rarr;</span></a>
+        <a class="btn btn-primary" data-link="beta" href="#">Join the closed beta <span class="arrow">&rarr;</span></a>
         <a class="btn btn-ghost" data-link="youtube" href="#">Watch 90-second demo</a>
       </div>
       <div class="trust-strip">
         <span><b>Runs locally.</b> Your price book never leaves your machine.</span>
         <span><b>One avoided misquote</b> pays for the year.</span>
-        <span><b>The trial is the whole product</b> — nothing held back.</span>
+        <span><b>Closed beta now</b> — a 30-day free trial of the whole product opens at public launch.</span>
       </div>
       <div class="suite-badges">
-        <span>Machine builders</span><span>Job shops</span><span>Contract manufacturers</span><span>Fabrication &amp; construction</span>
+        <span>Machine builders</span><span>Job shops</span><span>Contract manufacturers</span><span>Fabricators &amp; weld shops</span>
       </div>
     </div>
     <div class="hero-sheet" aria-label="Example: fastQuote pricing a weldment automatically">
@@ -109,7 +108,7 @@
       <div class="feat">
         <span class="fx mono">=TIME()</span>
         <h3>Quotes in minutes, not days</h3>
-        <p>The whole BOM &rarr; BOQ &rarr; Quote chain runs in one pass. What used to take an afternoon now takes a coffee break. The trial is the complete product — you will know inside 30 days whether it pays for itself.</p>
+        <p>The whole BOM &rarr; BOQ &rarr; Quote chain runs in one pass. What used to take an afternoon now takes a coffee break. The 30-day trial (opening at public launch) is the complete product — you will know inside 30 days whether it pays for itself.</p>
       </div>
       <div class="feat">
         <span class="fx mono">=LOCAL()</span>
@@ -132,9 +131,24 @@
         <p>Set markup percent per part type on a Data sheet. Formulas update live, so cost and margin edits recalculate the quote in place.</p>
       </div>
       <div class="feat">
+        <span class="fx mono">=MODE()</span>
+        <h3>Budgetary to firm, in one file</h3>
+        <p>Start with a quick $/lb number, then firm it up with material cost and labor hours &mdash; per assembly, so firm manufacture and budgetary installation can live in the same quote. Your hand-typed rows are never overwritten.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=YOURS()</span>
+        <h3>Your cost types, your words</h3>
+        <p>Types, markups and what gets added under what are rows in a rate sheet, not code. Start from the fabrication or construction profile, or define your own.</p>
+      </div>
+      <div class="feat">
         <span class="fx mono">=IMPORT()</span>
         <h3>ERP-ready output, no ERP required</h3>
         <p>Run fastQuote as a first pass before your ERP: validate, quote, then import. Works whether you have a system of record or a folder of workbooks.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=TERMS()</span>
+        <h3>A quote, not a price list</h3>
+        <p>Sales tax on or off, a validity date that flags expired quotes, exclusions and clarifications, alternates priced but kept out of the total, and a side-by-side compare between revisions.</p>
       </div>
     </div>
   </div>
@@ -147,7 +161,7 @@
     <h2>Start from the drawing, <span class="hl">not a blank sheet</span></h2>
     <p class="sub">Drop in the drawing package you already have. fastQuote reads it, checks it, prices it — and shows its work before a single number reaches your quote.</p>
     <div class="pipe-row" style="margin-top:28px;">
-      <div class="pipe"><b>PDF &middot; DXF &middot; STEP</b><small>Your drawing package</small></div>
+      <div class="pipe"><b>PDF &middot; DXF &middot; CAD BOM</b><small>Your drawing package</small></div>
       <span class="pipe-arrow">&rarr;</span>
       <div class="pipe"><b>Extract</b><small>4-layer strategy engine</small></div>
       <span class="pipe-arrow">&rarr;</span>
@@ -159,7 +173,7 @@
       <div class="feat">
         <span class="fx mono">=TAKEOFF()</span>
         <h3>BOM tables, part prints, CAD</h3>
-        <p>PDF parts lists, DXF cut profiles, STEP solid geometry — each format gets its own extraction strategy, and every strategy the engine learns is permanent. Your hundredth drawing is faster than your first.</p>
+        <p>PDF parts lists, DXF cut profiles (net area, holes subtracted, plate weight computed), and the Excel BOM your CAD system exports — each format gets its own extraction strategy, and every strategy the engine learns is permanent. Your hundredth drawing is faster than your first.</p>
       </div>
       <div class="feat">
         <span class="fx mono">=CHECK()</span>
@@ -175,12 +189,38 @@
   </div>
 </section>
 
+<!-- In development: 3D part prep + weldments (not in the closed beta) -->
+<section>
+  <div class="wrap">
+    <span class="cellref" data-ref="C2">THE FASTQUOTE FAMILY &middot; IN DEVELOPMENT</span>
+    <h2>fastQuote 3D <span class="hl">&amp; fastTakeoff</span></h2>
+    <p class="sub">The hours on a weldment or a machined part, and the quantities on a plan set, are where most quotes guess. Two tools measure them and land the numbers as ordinary rows you can read and override. <b>Design-partner preview &mdash; not part of the closed beta yet.</b> <a href="tools.html">See both tools &rarr;</a></p>
+    <div class="feat-grid">
+      <div class="feat">
+        <span class="fx mono">=WELD()</span>
+        <h3>fastQuote 3D: weldments</h3>
+        <p>Pick the edges in the 3D model, choose the joint (fillet, V-groove and other standard AWS joints), and the weld hours come from deposition, operating factor and position &mdash; plus weld prep and filler. Every factor is shown, so you can defend the hours.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=MACHINE()</span>
+        <h3>fastQuote 3D: machined parts</h3>
+        <p>Exact stock size and weight, holes, taps, setups and tolerances on the STEP model become machining hours on your own shop rates. Works inside FreeCAD, the free 3D CAD program you install yourself.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=PLANS()</span>
+        <h3>fastTakeoff: PDF plans</h3>
+        <p>Measure lengths, areas and counts on scaled PDF plans inside fastQuote, split the job by discipline, and send one combined bid. Built, not yet field-tested on real projects &mdash; construction contractors, <a href="mailto:support@fastquote.app?subject=Construction%20design%20partner">talk to us</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- The math -->
 <section>
   <div class="wrap">
     <span class="cellref" data-ref="D1">THE MATH</span>
     <h2>How it <span class="hl">pays for itself</span></h2>
-    <p class="sub">A single fabrication quote is worth thousands. One avoided misquote covers a year of fastQuote. Most shops hit that in week one.</p>
+    <p class="sub">A single fabrication quote is worth thousands. One avoided misquote covers a year of fastQuote.</p>
     <div class="feat-grid">
       <div class="feat">
         <span class="fx mono">=RISK()</span>
@@ -205,13 +245,13 @@
 <section class="section-alt">
   <div class="wrap">
     <span class="cellref" data-ref="E2">GET STARTED</span>
-    <h2>All features. <span class="hl">One subscription.</span></h2>
-    <p class="sub">No tiers to compare, no features held back for "enterprise", no per-call AI charges. One subscription includes everything on this page — and the 30-day trial is the complete product, so you know before you pay.</p>
+    <h2>All features. <span class="hl">Every plan.</span></h2>
+    <p class="sub">Per seat, or one price for your whole team on your own server &mdash; either way, no features held back and no per-call AI charges. Every plan includes everything on this page — and the 30-day trial (opening at public launch) is the complete product, so you know before you pay.</p>
     <div class="cta-row" style="justify-content:center;display:flex;margin-top:34px;flex-wrap:wrap;">
-      <a class="btn btn-primary" data-link="trial" href="#">Start 30-day free trial <span class="arrow">&rarr;</span></a>
+      <a class="btn btn-primary" data-link="beta" href="#">Join the closed beta <span class="arrow">&rarr;</span></a>
       <a class="btn btn-ghost" href="pricing.html">See pricing</a>
     </div>
-    <p class="pricing-fine">Running a shop, not just quoting? <a href="pricing.html">Enterprise</a> adds the closed-loop job-cost layer — vendor quotes, purchase orders, receipts, invoices, labor, and live job status — on the same local-first engine.</p>
+    <p class="pricing-fine">Running a shop, not just quoting? A closed-loop job-cost layer is on the roadmap &mdash; help <a href="pricing.html">shape it as a design partner</a>: — vendor quotes, purchase orders, receipts, invoices, labor, and live job status — on the same local-first engine.</p>
   </div>
 </section>
 
@@ -219,7 +259,7 @@
 <section>
   <div class="wrap">
     <span class="cellref" data-ref="D2">QUESTIONS</span>
-    <h2>Before you start the trial</h2>
+    <h2>Before you join</h2>
     <div class="faq">
       <details class="qa">
         <summary>Do I need to send my data anywhere?</summary>
@@ -235,7 +275,7 @@
       </details>
       <details class="qa">
         <summary>Can it read my drawings?</summary>
-        <p>Yes — PDF BOM tables, DXF cut profiles, and STEP solid models. The 4-layer takeoff engine extracts, checks, and prices rows into your BOM, and every assembly drill-down asks before it goes deeper. Deterministic checks decide what is trusted — never a model's self-confidence.</p>
+        <p>Yes — PDF BOM tables and part prints, DXF cut profiles, and the Excel BOM your CAD system exports. The 4-layer takeoff engine extracts, checks, and prices rows into your BOM, and every assembly drill-down asks before it goes deeper. Deterministic checks decide what is trusted — never a model's self-confidence. 3D models (STEP) through <a href="tools.html#fastquote-3d">fastQuote 3D</a> and PDF construction plans through <a href="tools.html#fasttakeoff">fastTakeoff</a> are in development and not part of the closed beta yet.</p>
       </details>
       <details class="qa">
         <summary>What happens after the 30-day trial?</summary>
@@ -243,7 +283,7 @@
       </details>
       <details class="qa">
         <summary>Is this an ERP?</summary>
-        <p>No. fastQuote is quoting-first: it owns the BOM-to-quote path and produces ERP-ready output you can import. Shops that want the full loop — purchase orders, receipts, invoices, labor, live job cost — get it in the <a href="pricing.html">Enterprise tier</a>, built on the same local-first engine.</p>
+        <p>No. fastQuote is quoting-first: it owns the BOM-to-quote path and produces ERP-ready output you can import. Shops that want the full loop — purchase orders, receipts, invoices, labor, live job cost — that is on the roadmap, and <a href="pricing.html">design partners</a> are shaping it &mdash; built on the same local-first engine.</p>
       </details>
       <details class="qa">
         <summary>What if I don't like it?</summary>
@@ -263,6 +303,7 @@
       <a data-link="youtube" href="#">YouTube</a>
       <a data-link="docs" href="#">Docs</a>
       <a data-link="releases" href="#">Releases</a>
+      <a href="engine.html">Build on the engine</a>
       <a data-link="support" href="#">Support</a>
     </nav>
   </div>

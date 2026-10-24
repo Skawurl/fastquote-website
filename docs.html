@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>fastQuote — Documentation</title>
-<meta name="description" content="Installation, configuration, and usage guides for fastQuote Desktop and Engine API.">
-<script>const LINKS={trial:"https://payhip.com/fastquote",buyPro:"https://payhip.com/b/fastquote-pro",buyEnt:"mailto:support@fastquote.app?subject=Enterprise",github:"https://github.com/fastquote-community",discord:"https://discord.gg/fastquote",youtube:"https://youtube.com/@fastquote",docs:"docs.html",releases:"https://github.com/fastquote/releases",support:"mailto:support@fastquote.app"};</script>
+<meta name="description" content="Installation, configuration, and usage guides for fastQuote.">
+<script>const LINKS={beta:"mailto:support@fastquote.app?subject=fastQuote%20closed%20beta",trial:"https://payhip.com/fastquote",buyPro:"https://payhip.com/b/fastquote-pro",buyEnt:"mailto:support@fastquote.app?subject=Enterprise",github:"https://github.com/fastquote-community",discord:"https://discord.gg/fastquote",youtube:"https://youtube.com/@fastquote",docs:"docs.html",releases:"https://github.com/fastquote/releases",support:"mailto:support@fastquote.app"};</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -20,12 +20,11 @@
     <a class="logo" href="index.html"><span class="mark">fq</span>fastQuote</a>
     <nav class="nav-links" aria-label="Site">
       <a href="index.html">Home</a>
-      <a href="desktop.html">Desktop</a>
-      <a href="engine.html">Engine API</a>
+      <a href="tools.html">3D &amp; Takeoff</a>
       <a href="pricing.html">Pricing</a>
       <a href="docs.html" class="active">Docs</a>
     </nav>
-    <a class="btn btn-primary" data-link="trial" href="#">Start 30-day trial</a>
+    <a class="btn btn-primary" data-link="beta" href="#">Join the closed beta</a>
   </div>
 </header>
 
@@ -44,6 +43,7 @@
   <aside class="docs-sidebar">
     <h4>Getting Started</h4>
     <ul>
+      <li><a href="#user-guides">User Guides</a></li>
       <li><a href="#installation">Installation</a></li>
       <li><a href="#quickstart">Quick Start</a></li>
       <li><a href="#configuration">Configuration</a></li>
@@ -59,13 +59,26 @@
     <h4 style="margin-top:24px;">Advanced</h4>
     <ul>
       <li><a href="#mcp-server">MCP Server</a></li>
-      <li><a href="#api-providers">API Pricing Providers</a></li>
       <li><a href="#validation">Validation</a></li>
-      <li><a href="#config-reference">Config Reference</a></li>
     </ul>
   </aside>
 
   <main class="docs-content">
+
+<h2 id="user-guides">User Guides</h2>
+<p>Plain-language guides ship in the product repo under
+<code>documents/users/</code> — written for estimators, not engineers:</p>
+<table><tr><th>Guide</th><th>Covers</th></tr>
+<tr><td><b>Getting Started</b><br><code>getting-started.md</code></td><td>Install, the one-folder mental model, your first estimate, filling the BOM, first pipeline run.</td></tr>
+<tr><td><b>Dashboard Guide</b><br><code>dashboard-guide.md</code></td><td>Every panel: workspace strip (pipeline, win rate), financials, cost-by-type, warnings, revisions, quick actions, Quote Preview &amp; PDF export.</td></tr>
+<tr><td><b>Pricing Guide</b><br><code>pricing-guide.md</code></td><td>The four pricing sources, price-book discipline, rate sheets, material spot refresh (BYO key), profile forks.</td></tr>
+<tr><td><b>Tutorial 01 — Your First Quote</b><br><code>tutorials/01-your-first-quote.md</code></td><td>New Quote → BOM rows → insert a nest → Run All → fix a warning → Quote Preview → PDF → Set Status → commit &amp; tag.</td></tr>
+<tr><td><b>Tutorial 02 — Parts, Nests &amp; the Price Book</b><br><code>tutorials/02-parts-nests-and-the-price-book.md</code></td><td>The Insert Part / Nest flow, parent placement rules, the price-book loop, keeping material rates honest.</td></tr>
+<tr><td><b>Tutorial 03 — Budgetary vs Firm</b><br><code>tutorials/03-budgetary-vs-firm.md</code></td><td>Quote top-down ($/lb) or bottom-up (material + hours), per assembly, in the same file.</td></tr>
+<tr><td><b>Tutorial 04 — Your Own Vocabulary</b><br><code>tutorials/04-your-own-vocabulary.md</code></td><td>Define your own cost types, markups and auto-added rows in <code>rates.csv</code> &mdash; no code.</td></tr>
+<tr><td><b>Tutorial 05 — Machined Parts &amp; Weldments in 3D</b><br><code>tutorials/05-machined-parts-and-weldments.md</code></td><td>In development, not in the closed beta: cost a part or weldment from its STEP model in FreeCAD.</td></tr>
+<tr><td><b>Rates CSV Guide</b><br><code>rates-csv-guide.md</code></td><td>Every column and section of <code>rates.csv</code>, with recipes and common errors.</td></tr>
+</table>
 
 <h2 id="installation">Installation</h2>
 
@@ -73,7 +86,9 @@
 <table><tr><th>Requirement</th><th>Minimum</th><th>Notes</th></tr>
 <tr><td>Python</td><td>3.10+</td><td>3.11 or 3.12 recommended</td></tr>
 <tr><td>VS Code</td><td>Any recent</td><td>With the Python extension</td></tr>
-<tr><td>openpyxl</td><td>3.1+</td><td>Only required dependency</td></tr></table>
+<tr><td>openpyxl</td><td>3.1+</td><td>Required for the engine</td></tr>
+<tr><td>pdfplumber, ezdxf</td><td>see <code>requirements-takeoff.txt</code></td><td>Drawing takeoff (PDF, DXF)</td></tr>
+<tr><td>LibreOffice</td><td>Any recent</td><td>Optional &mdash; PDF export of the quote</td></tr></table>
 
 <h3>Setup</h3>
 <ol>
@@ -92,9 +107,9 @@ python app/fastQuote.py template test.xlsx</pre>
 <p>Open the <code>extension/</code> folder in VS Code, run <code>npm install</code>, then press F5 to launch. The extension provides a project tree view, inline Run / Validate buttons, and a config editor with JSON schema validation.</p>
 
 <h3>Optional: MCP Server</h3>
-<pre>pip install "mcp[cli]" httpx
+<pre>pip install -r requirements-mcp.txt
 python mcp_server.py</pre>
-<p>Exposes 57 tools your AI agent can drive directly.</p>
+<p>Exposes the engine as tools your AI agent can drive directly — see <code>documents/fastQuote_mcp_guide.md</code>.</p>
 
 <hr>
 
@@ -111,7 +126,7 @@ python app/fastQuote.py run MyProject.xlsx</pre>
 <p>Generate a default config:</p>
 <pre>python app/fastQuote.py config</pre>
 <p>Key sections in <code>bom_config.json</code>: <b>columns</b> (1-based Excel positions), <b>sheet_names</b>, <b>folder_types</b>, <b>settings</b> (start row, max tree depth).</p>
-<p>Estimator data (types, markups, rates, UOMs, vendors) lives in <code>rates.csv</code> — edit in Excel, then <code>rates sync</code> compiles to <code>rates.json</code>. Never hand-edit rates.json.</p>
+<p>Estimator data (types, markups, rates, UOMs, vendors) lives in <code>rates.csv</code> — edit it in the Rates panel or in Excel; it compiles to <code>rates.json</code> automatically on Run All. Never hand-edit rates.json.</p>
 
 <hr>
 <h2 id="commands">Commands</h2>
@@ -147,7 +162,7 @@ python app/fastQuote.py run MyProject.xlsx</pre>
 
 <hr>
 <h2 id="mcp-server">MCP Server</h2>
-<p>57 tools your AI agent can drive: BOM inspection, vendor pricing, price book, validation, rate sheets, pipeline, takeoff, strategy engine.</p>
+<p>Tools your AI agent can drive: BOM inspection, vendor pricing, price book, validation, rate sheets, pipeline, takeoff, strategy engine.</p>
 
 <hr>
 <h2 id="validation">Validation</h2>
@@ -166,6 +181,7 @@ python app/fastQuote.py run MyProject.xlsx</pre>
       <a data-link="youtube" href="#">YouTube</a>
       <a data-link="docs" href="#">Docs</a>
       <a data-link="releases" href="#">Releases</a>
+      <a href="engine.html">Build on the engine</a>
       <a data-link="support" href="#">Support</a>
     </nav>
   </div>

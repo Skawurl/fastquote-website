@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fastQuote 3D &amp; fastTakeoff</title>
+<meta name="description" content="fastQuote 3D costs machined parts and weldments from the STEP model inside FreeCAD. fastTakeoff measures quantities on PDF plans. Both send their numbers straight into your fastQuote estimate. In development.">
+<script>const LINKS={beta:"mailto:support@fastquote.app?subject=fastQuote%20closed%20beta",trial:"https://payhip.com/fastquote",buyPro:"https://payhip.com/b/fastquote-pro",buyEnt:"mailto:support@fastquote.app?subject=Enterprise",github:"https://github.com/fastquote-community",discord:"https://discord.gg/fastquote",youtube:"https://youtube.com/@fastquote",docs:"docs.html",releases:"https://github.com/fastquote/releases",support:"mailto:support@fastquote.app"};</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"></noscript>
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="%23244061"/><text x="16" y="22" font-family="monospace" font-size="15" font-weight="700" fill="%23FFE9A8" text-anchor="middle">fq</text></svg>'>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><span class="mark">fq</span>fastQuote</a>
+    <nav class="nav-links" aria-label="Site">
+      <a href="index.html">Home</a>
+      <a href="tools.html" class="active">3D &amp; Takeoff</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <a class="btn btn-primary" data-link="beta" href="#">Join the closed beta</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="tagline">THE FASTQUOTE FAMILY &middot; IN DEVELOPMENT</div>
+      <h1>From the model and the plans<br><span class="hl">straight into the estimate.</span></h1>
+      <p class="lede">Two tools that measure what you are quoting and hand the numbers to fastQuote as ordinary estimate rows &mdash; priced on your rates, readable line by line, yours to override. <b>fastQuote 3D</b> works inside FreeCAD on 3D models. <b>fastTakeoff</b> measures PDF plans.</p>
+      <p class="lede" style="font-size:14px;"><b>Both are in development:</b> built and working in our own tests, not yet used on customer jobs, and not part of the closed beta. Design partners get them first.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="mailto:support@fastquote.app?subject=fastQuote%203D%20%2F%20fastTakeoff%20design%20partner">Become a design partner <span class="arrow">&rarr;</span></a>
+        <a class="btn btn-ghost" href="#compare">Which one do I need?</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- fastQuote 3D -->
+<section id="fastquote-3d">
+  <div class="wrap">
+    <span class="cellref" data-ref="A1">FASTQUOTE 3D &middot; FOR FREECAD</span>
+    <h2>Price the part, <span class="hl">not just the parts list</span></h2>
+    <p class="sub">The hours on a weldment or a machined part are where most quotes guess. fastQuote 3D reads the exact geometry from the STEP model and turns it into hours on your own shop rates &mdash; and shows every factor it used.</p>
+    <div class="profiles">
+      <div class="profile">
+        <div class="who">Weldment costing</div>
+        <h3>Weld hours you can defend</h3>
+        <ul>
+          <li>Pick edges on the model, or draw the weld path</li>
+          <li>Standard AWS joints: fillet, square / V / bevel / J / U grooves, flare, plug and slot</li>
+          <li>Hours from deposition, operating factor and weld position</li>
+          <li>Weld prep (e.g. grinding) and filler metal as their own rows</li>
+        </ul>
+        <div class="types"><span>WLDR</span><span>WFIL</span></div>
+      </div>
+      <div class="profile">
+        <div class="who">Part costing</div>
+        <h3>Machined parts from the STEP file</h3>
+        <ul>
+          <li>Exact stock size and weight from the solid</li>
+          <li>Holes found for you; you confirm taps and tag setups, tolerances and finishes on faces</li>
+          <li>Machining hours from removed material, holes and setups</li>
+          <li>Finishes, and burn profiles exported as 1:1 DXFs</li>
+        </ul>
+        <div class="types"><span>MATL</span><span>MACH</span><span>FINSH</span><span>BURN</span></div>
+      </div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat">
+        <span class="fx mono">=TREE()</span>
+        <h3>Lives in FreeCAD&rsquo;s model tree</h3>
+        <p>Stock, holes, operations, finishes, tolerances and welds are objects in the model tree with real units &mdash; double-click to edit. Saved with the model, reopened any time.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=SEND()</span>
+        <h3>Send to estimate</h3>
+        <p>One click lands the part&rsquo;s rows in your fastQuote job, under the right assembly, priced at the next Run All. Change the model and send again &mdash; the new rows replace the old ones.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=FREE()</span>
+        <h3>Runs in FreeCAD</h3>
+        <p>FreeCAD is the free, open-source 3D CAD program (version 1.1 or later); you install it yourself. Works in inches or millimetres &mdash; it follows your FreeCAD units.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- fastTakeoff -->
+<section id="fasttakeoff" class="section-alt">
+  <div class="wrap">
+    <span class="cellref" data-ref="B1">FASTTAKEOFF &middot; PDF PLANS</span>
+    <h2>Measure the plans, <span class="hl">price in fastQuote</span></h2>
+    <p class="sub">Open the plan set inside fastQuote, measure lengths, areas and counts on the scaled sheets, and send the quantities to the estimate. fastTakeoff measures; fastQuote prices &mdash; on your rates, never on a price list baked into a takeoff tool.</p>
+    <div class="feat-grid">
+      <div class="feat">
+        <span class="fx mono">=MEASURE()</span>
+        <h3>Lengths, areas, counts</h3>
+        <p>Scaled PDF plans, measured on screen. Conditions and assemblies group what you measured into the items you actually price.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=WASTE()</span>
+        <h3>Waste and CSI carried through</h3>
+        <p>Quantities arrive with their waste factor and CSI code, in your profile&rsquo;s units, as rows in the right discipline&rsquo;s workbook.</p>
+      </div>
+      <div class="feat">
+        <span class="fx mono">=BID()</span>
+        <h3>One combined bid</h3>
+        <p>Split the job by discipline, run each one, and send one quote with project-level costs, contingency and bond.</p>
+      </div>
+    </div>
+    <p class="pricing-fine">fastTakeoff is based on the open-source TakeoffCraft by The Data Design Group, Inc. (Apache License 2.0). It is not made or endorsed by The Data Design Group. TakeoffCraft is a trademark of The Data Design Group, Inc.</p>
+  </div>
+</section>
+
+<!-- Compare -->
+<section id="compare">
+  <div class="wrap">
+    <span class="cellref" data-ref="C1">WHICH ONE</span>
+    <h2>Which one <span class="hl">do I need?</span></h2>
+    <div class="profiles">
+      <div class="profile">
+        <div class="who">You quote from 3D models</div>
+        <h3>fastQuote 3D</h3>
+        <ul>
+          <li>Machine shops, fabricators, weld shops</li>
+          <li>Customer sends STEP files, or you model the part</li>
+          <li>The hard number is machining or welding hours</li>
+        </ul>
+      </div>
+      <div class="profile">
+        <div class="who">You quote from plan sets</div>
+        <h3>fastTakeoff</h3>
+        <ul>
+          <li>Trade and specialty contractors</li>
+          <li>Customer sends PDF drawings to scale</li>
+          <li>The hard number is quantities: feet, square feet, counts</li>
+        </ul>
+      </div>
+    </div>
+    <p class="pricing-fine">Both are included in every fastQuote plan as they leave development &mdash; no add-on prices. fastQuote itself already reads PDF parts lists, DXF cut profiles and CAD Excel BOMs without either tool.</p>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> fastQuote &middot; Instant Estimates. Accelerated Business.</span>
+    <nav aria-label="Footer">
+      <a data-link="github" href="#">GitHub</a>
+      <a data-link="discord" href="#">Discord</a>
+      <a data-link="youtube" href="#">YouTube</a>
+      <a data-link="docs" href="#">Docs</a>
+      <a data-link="releases" href="#">Releases</a>
+      <a href="engine.html">Build on the engine</a>
+      <a data-link="support" href="#">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script data-goatcounter="https://fast-quote.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="site.js"></script>
+</body>
+</html>
